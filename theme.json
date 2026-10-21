@@ -21,9 +21,9 @@
 		"typography": {
 			"fontFamilies": [
 				{
-					"name": "Hind Siliguri",
-					"slug": "hind-siliguri",
-					"fontFamily": "\"Hind Siliguri\", sans-serif"
+					"name": "Tiro Bangla",
+					"slug": "tiro-bangla",
+					"fontFamily": "\"Tiro Bangla\", serif"
 				},
 				{
 					"name": "Noto Serif Bengali",
@@ -39,7 +39,7 @@
 			"text": "var:preset|color|contrast"
 		},
 		"typography": {
-			"fontFamily": "var:preset|font-family|hind-siliguri",
+			"fontFamily": "var:preset|font-family|tiro-bangla",
 			"fontSize": "var:preset|font-size|medium",
 			"fontWeight": "400",
 			"letterSpacing": "0",

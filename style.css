@@ -67,6 +67,91 @@ Text Domain: bookshop
 	border-radius: 4px;
 	padding: 0 1.1rem;
 	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+.bookshop-header .wp-block-search__button::before {
+	content: "";
+	width: 16px;
+	height: 16px;
+	background: currentColor;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Live search dropdown (assets/live-search.js). */
+.bookshop-search {
+	position: relative;
+}
+.bookshop-search__results {
+	position: absolute;
+	top: calc(100% + 6px);
+	left: 0;
+	right: 0;
+	z-index: 100;
+	max-height: 70vh;
+	overflow-y: auto;
+	padding: 0.35rem;
+	background: var(--wp--preset--color--base);
+	border: var(--bs-border);
+	border-radius: var(--bs-radius);
+	box-shadow: 0 12px 32px rgb(17 24 39 / 0.12);
+}
+.bookshop-search__results a {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.5rem;
+	border-radius: 6px;
+	color: var(--wp--preset--color--contrast);
+	text-decoration: none;
+}
+.bookshop-search__results a:hover,
+.bookshop-search__results a:focus {
+	background: var(--wp--preset--color--accent-5);
+	outline: none;
+}
+.bookshop-search__results img {
+	flex: none;
+	width: 40px;
+	height: 52px;
+	object-fit: cover;
+	border-radius: 3px;
+	background: var(--wp--preset--color--accent-5);
+}
+.bookshop-search__results strong {
+	display: block;
+	font-weight: 500;
+	line-height: 1.4;
+}
+.bookshop-search__results .price {
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	color: var(--wp--preset--color--accent-1);
+}
+.bookshop-search__results .price del {
+	font-weight: 400;
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-search__results .price ins {
+	text-decoration: none;
+}
+a.bookshop-search__all {
+	justify-content: center;
+	margin-top: 0.25rem;
+	border-top: var(--bs-border);
+	border-radius: 0 0 6px 6px;
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 500;
+	color: var(--wp--preset--color--accent-1);
+}
+.bookshop-search__empty {
+	margin: 0;
+	padding: 0.75rem;
+	text-align: center;
+	font-size: var(--wp--preset--font-size--small);
+	color: var(--wp--preset--color--accent-4);
 }
 
 /* Account + cart: 40px tap targets. */
@@ -180,7 +265,7 @@ Text Domain: bookshop
 	border-radius: 4px;
 }
 .wc-block-product .wp-block-post-title {
-	font-family: var(--wp--preset--font-family--hind-siliguri);
+	font-family: var(--wp--preset--font-family--noto-serif-bengali);
 	font-weight: 600;
 	line-height: 1.45;
 }

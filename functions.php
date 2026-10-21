@@ -4,7 +4,7 @@
  */
 
 function bookshop_fonts_url() {
-	return 'https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600&family=Noto+Serif+Bengali:wght@500;600;700&display=swap';
+	return 'https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Noto+Serif+Bengali:wght@500;600;700&display=swap';
 }
 
 add_action(
@@ -12,6 +12,8 @@ add_action(
 	function () {
 		wp_enqueue_style( 'bookshop-fonts', bookshop_fonts_url(), array(), null );
 		wp_enqueue_style( 'bookshop-style', get_stylesheet_uri(), array( 'twentytwentyfive-style' ), wp_get_theme()->get( 'Version' ) );
+		wp_enqueue_script( 'bookshop-live-search', get_theme_file_uri( 'assets/live-search.js' ), array(), wp_get_theme()->get( 'Version' ), array( 'strategy' => 'defer' ) );
+		wp_add_inline_script( 'bookshop-live-search', 'const bookshopSearch = ' . wp_json_encode( array( 'api' => rest_url( 'wc/store/v1/products' ) ) ) . ';', 'before' );
 	}
 );
 
@@ -83,6 +85,31 @@ add_filter(
 			$p->set_attribute( 'aria-current', 'page' );
 		}
 		return $p->get_updated_html();
+	},
+	10,
+	2
+);
+
+// Product search also matches product tag names (live search + results page).
+add_filter(
+	'posts_search',
+	function ( $search, $query ) {
+		global $wpdb;
+		if ( ! $search || ! in_array( 'product', (array) $query->get( 'post_type' ), true ) ) {
+			return $search;
+		}
+		// Core may append a password clause; keep it outside our OR.
+		$pw   = " AND ({$wpdb->posts}.post_password = '')";
+		$tail = str_ends_with( $search, $pw ) ? $pw : '';
+		$main = $tail ? substr( $search, 0, -strlen( $pw ) ) : $search;
+		$ids  = $wpdb->prepare(
+			"SELECT tr.object_id FROM {$wpdb->term_relationships} tr
+			INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.taxonomy = 'product_tag'
+			INNER JOIN {$wpdb->terms} t ON t.term_id = tt.term_id
+			WHERE t.name LIKE %s",
+			'%' . $wpdb->esc_like( $query->get( 's' ) ) . '%'
+		);
+		return preg_replace( '/^\s*AND\s*/', ' AND (', $main, 1 ) . " OR {$wpdb->posts}.ID IN ( $ids ))" . $tail;
 	},
 	10,
 	2
