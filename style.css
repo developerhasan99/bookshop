@@ -1,0 +1,450 @@
+/*
+Theme Name: Bookshop
+Template: twentytwentyfive
+Description: Classic, minimal Bangla book store. Child theme of Twenty Twenty-Five.
+Version: 1.4
+Text Domain: bookshop
+*/
+
+:root {
+	--bs-border: 1px solid var(--wp--preset--color--accent-6);
+	--bs-radius: 8px;
+}
+
+/* Keep it calm: no motion. */
+*, *::before, *::after {
+	transition: none !important;
+	animation: none !important;
+}
+
+.bookshop-card {
+	background: var(--wp--preset--color--accent-5);
+	border: var(--bs-border);
+	border-radius: var(--bs-radius);
+}
+
+/* ---------- Header ---------- */
+.bookshop-header .wp-block-search__inside-wrapper {
+	border: var(--bs-border);
+	border-radius: 6px;
+	padding: 3px;
+	background: var(--wp--preset--color--accent-5);
+}
+.bookshop-header .wp-block-search__input {
+	border: 0;
+	background: transparent;
+	padding: 0.35rem 0.8rem;
+}
+.bookshop-header .wp-block-search__button {
+	border-radius: 4px;
+	padding: 0.35rem 1rem;
+}
+.bookshop-nav a:hover {
+	color: var(--wp--preset--color--accent-1);
+}
+
+/* ---------- Hero ---------- */
+.bookshop-pill {
+	display: inline-block;
+	background: #fff;
+	border: var(--bs-border);
+	border-radius: 999px;
+	padding: 0.2rem 0.9rem;
+}
+.bookshop-pill .stars {
+	color: #E0A100;
+	letter-spacing: 1px;
+}
+
+/* ---------- Trust row ---------- */
+.bookshop-trust svg {
+	width: 30px;
+	height: 30px;
+	stroke: var(--wp--preset--color--contrast);
+	fill: none;
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* ---------- Section heading ---------- */
+.bookshop-section-head h2 {
+	margin: 0;
+}
+.bookshop-viewall a {
+	color: var(--wp--preset--color--contrast);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 500;
+	text-underline-offset: 4px;
+}
+
+/* ---------- Product cards ---------- */
+.wc-block-product-template > li,
+.wc-block-product {
+	background: #fff;
+	border: var(--bs-border);
+	border-radius: var(--bs-radius);
+	padding: 0.75rem;
+}
+.wc-block-components-product-image img {
+	aspect-ratio: 1;
+	object-fit: cover !important;
+	background: var(--wp--preset--color--accent-5);
+	border-radius: 4px;
+}
+.wc-block-product .wp-block-post-title {
+	font-family: var(--wp--preset--font-family--hind-siliguri);
+	font-weight: 600;
+	line-height: 1.45;
+}
+.wc-block-product .wp-block-post-title a {
+	color: var(--wp--preset--color--contrast);
+	text-decoration: none;
+}
+.wc-block-components-product-price {
+	color: var(--wp--preset--color--contrast);
+	font-weight: 600;
+}
+.wc-block-components-product-price ins {
+	text-decoration: none;
+}
+.wc-block-components-product-price del {
+	color: var(--wp--preset--color--accent-4);
+	font-weight: 400;
+}
+.wc-block-components-product-sale-badge {
+	background: var(--wp--preset--color--accent-3) !important;
+	color: #fff !important;
+	border: 0 !important;
+	border-radius: 3px !important;
+}
+.wc-block-product .wc-block-components-product-button__button {
+	width: 100%;
+	background: #fff !important;
+	color: var(--wp--preset--color--accent-1) !important;
+	border: 1px solid var(--wp--preset--color--accent-1) !important;
+	padding: 0.5rem 1rem !important;
+}
+.wc-block-product .wc-block-components-product-button__button:hover {
+	background: var(--wp--preset--color--accent-1) !important;
+	color: #fff !important;
+}
+
+/* ---------- Category tiles ---------- */
+.bookshop-tile {
+	border-radius: var(--bs-radius);
+	overflow: hidden;
+}
+.bookshop-tile .bookshop-tile-label {
+	margin: 0;
+}
+.bookshop-tile .bookshop-tile-label a {
+	display: block;
+	background: #fff;
+	color: var(--wp--preset--color--contrast);
+	border-radius: 4px;
+	padding: 0.4rem;
+	font-weight: 600;
+	text-decoration: none;
+}
+.bookshop-tile .bookshop-tile-label a::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+/* ---------- Why-us checklist ---------- */
+.bookshop-checks {
+	list-style: none;
+	padding: 0;
+}
+.bookshop-checks li {
+	position: relative;
+	padding-left: 3rem;
+	margin-bottom: 1.25rem;
+	color: var(--wp--preset--color--accent-4);
+	font-size: var(--wp--preset--font-size--small);
+}
+.bookshop-checks li strong {
+	color: var(--wp--preset--color--contrast);
+	font-size: var(--wp--preset--font-size--medium);
+}
+.bookshop-checks li::before {
+	content: "✓";
+	position: absolute;
+	left: 0;
+	top: 0.1rem;
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background: var(--wp--preset--color--accent-1);
+	color: #fff;
+	display: grid;
+	place-items: center;
+	font-weight: 700;
+}
+
+/* ---------- Inline category band ---------- */
+.bookshop-inline {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+.bookshop-inline li,
+.bookshop-inline .children {
+	display: inline;
+	padding: 0;
+}
+.bookshop-inline li a {
+	color: #fff;
+	margin: 0 0.4rem;
+}
+.bookshop-inline li + li::before,
+.bookshop-inline .children li::before {
+	content: "|";
+	opacity: 0.5;
+}
+
+/* ---------- Checkout & cart: bordered panels ---------- */
+.wp-block-woocommerce-checkout,
+.wp-block-woocommerce-cart {
+	border: var(--bs-border);
+	border-radius: 12px;
+	padding: 1.5rem !important;
+}
+.wc-block-checkout .wc-block-components-checkout-step,
+.wc-block-checkout__sidebar,
+.wc-block-cart__sidebar {
+	background: var(--wp--preset--color--accent-5);
+	border: var(--bs-border);
+	border-radius: var(--bs-radius);
+	padding: 1.25rem !important;
+	margin-bottom: 1rem !important;
+}
+.wc-block-checkout .wc-block-components-checkout-step::after {
+	display: none;
+}
+.wc-block-checkout .wc-block-components-checkout-step__container,
+.wc-block-checkout .wc-block-components-checkout-step__heading {
+	padding-left: 0 !important;
+	margin-left: 0 !important;
+}
+.wc-block-checkout .wc-block-components-checkout-step__title::before {
+	display: none !important;
+}
+.wc-block-components-text-input input,
+.wc-block-components-combobox .wc-block-components-combobox-control input,
+.wc-block-components-textarea,
+.wc-blocks-components-select__select {
+	background: #fff !important;
+	border: var(--bs-border) !important;
+	border-radius: 6px !important;
+}
+.wc-block-components-checkout-place-order-button,
+.wc-block-cart__submit-button {
+	width: 100%;
+	border-radius: 6px !important;
+}
+.wc-block-checkout__sidebar .wp-block-woocommerce-checkout-order-summary-block {
+	border: 0 !important;
+}
+
+/* ---------- Footer ---------- */
+footer a {
+	text-decoration: none;
+}
+footer a:hover {
+	text-decoration: underline;
+}
+
+/* ---------- My account ---------- */
+.woocommerce-account .woocommerce {
+	display: grid;
+	max-width: none !important;
+	grid-template-columns: 240px 1fr;
+	gap: 1.5rem;
+	align-items: start;
+}
+.woocommerce-account .woocommerce::before,
+.woocommerce-account .woocommerce::after {
+	display: none !important;
+}
+.woocommerce-account .woocommerce > .woocommerce-notices-wrapper {
+	grid-column: 1 / -1;
+}
+.woocommerce-MyAccount-navigation,
+.woocommerce-MyAccount-content {
+	float: none !important;
+	width: auto !important;
+	border: var(--bs-border);
+	border-radius: var(--bs-radius);
+}
+.woocommerce-MyAccount-navigation {
+	background: var(--wp--preset--color--accent-5);
+	padding: 0.5rem;
+}
+.woocommerce-MyAccount-navigation ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.woocommerce-MyAccount-navigation li {
+	margin: 0 0 2px !important;
+	padding: 0 !important;
+}
+.woocommerce-MyAccount-navigation a {
+	display: block;
+	padding: 0.6rem 0.9rem;
+	border-radius: 6px;
+	color: var(--wp--preset--color--contrast);
+	text-decoration: none !important;
+	font-weight: 500;
+}
+.woocommerce-MyAccount-navigation a:hover {
+	background: #fff;
+}
+.woocommerce-MyAccount-navigation .is-active a {
+	background: var(--wp--preset--color--accent-2);
+	color: var(--wp--preset--color--accent-1);
+	box-shadow: inset 3px 0 0 var(--wp--preset--color--accent-1);
+}
+.woocommerce-MyAccount-navigation-link--customer-logout {
+	border-top: var(--bs-border);
+	margin-top: 0.5rem !important;
+	padding-top: 0.5rem !important;
+}
+.woocommerce-MyAccount-navigation-link--customer-logout a {
+	color: var(--wp--preset--color--accent-3);
+}
+.woocommerce-MyAccount-content {
+	padding: 1.5rem 1.75rem;
+	min-height: 320px;
+}
+.woocommerce-MyAccount-content > p:first-child {
+	margin-top: 0;
+}
+
+/* Dashboard cards */
+.bookshop-account-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 1rem;
+	margin-top: 1.5rem;
+}
+.bookshop-account-cards a {
+	display: block;
+	border: var(--bs-border);
+	border-radius: var(--bs-radius);
+	padding: 1rem 1.1rem;
+	text-decoration: none;
+	color: var(--wp--preset--color--contrast);
+	background: #fff;
+}
+.bookshop-account-cards a:hover {
+	border-color: var(--wp--preset--color--accent-1);
+}
+.bookshop-account-cards strong {
+	display: block;
+	color: var(--wp--preset--color--accent-1);
+}
+.bookshop-account-cards span {
+	font-size: var(--wp--preset--font-size--small);
+	color: var(--wp--preset--color--accent-4);
+}
+
+/* Tables, address cards, forms */
+.woocommerce-MyAccount-content table.shop_table {
+	width: 100%;
+	border-collapse: collapse;
+	border: var(--bs-border);
+	border-radius: var(--bs-radius);
+	overflow: hidden;
+	font-size: var(--wp--preset--font-size--small);
+}
+.woocommerce-MyAccount-content table.shop_table th,
+.woocommerce-MyAccount-content table.shop_table td {
+	padding: 0.7rem 0.9rem;
+	border-bottom: var(--bs-border);
+	text-align: left;
+}
+.woocommerce-MyAccount-content table.shop_table thead th {
+	background: var(--wp--preset--color--accent-5);
+}
+.woocommerce-Addresses {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1rem;
+}
+.woocommerce-Addresses::before,
+.woocommerce-Addresses::after {
+	display: none !important;
+}
+.woocommerce-Address {
+	float: none !important;
+	width: auto !important;
+	border: var(--bs-border);
+	border-radius: var(--bs-radius);
+	padding: 1rem 1.1rem;
+}
+.woocommerce-Address-title h2,
+.woocommerce-MyAccount-content h2 {
+	font-size: var(--wp--preset--font-size--medium);
+	margin-top: 0;
+}
+.woocommerce-account .woocommerce form .form-row {
+	margin-bottom: 1rem;
+}
+.woocommerce-account .woocommerce form .form-row label {
+	display: block;
+	font-weight: 500;
+	margin-bottom: 0.3rem;
+}
+.woocommerce-account .woocommerce form .input-text,
+.woocommerce-account .woocommerce form select {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.6rem 0.8rem;
+	border: var(--bs-border);
+	border-radius: 6px;
+	background: #fff;
+	font: inherit;
+	font-size: 1rem !important;
+}
+.woocommerce-account .woocommerce form .input-text:focus {
+	outline: 2px solid var(--wp--preset--color--accent-2);
+	border-color: var(--wp--preset--color--accent-1);
+}
+.woocommerce-account fieldset {
+	border: var(--bs-border);
+	border-radius: var(--bs-radius);
+	padding: 1rem 1.1rem;
+	margin: 1.5rem 0;
+}
+.woocommerce-account .woocommerce .button {
+	border-radius: 6px;
+}
+
+/* Logged out: centered login card */
+.woocommerce-account:not(.logged-in) .woocommerce {
+	display: block;
+	max-width: 440px;
+	margin-inline: auto;
+	border: var(--bs-border);
+	border-radius: 12px;
+	padding: 1.75rem;
+	background: var(--wp--preset--color--accent-5);
+}
+.woocommerce-account:not(.logged-in) .wp-block-post-title {
+	text-align: center;
+}
+.woocommerce-account:not(.logged-in) .woocommerce-form-login__submit {
+	width: 100%;
+	margin-top: 0.75rem;
+}
+
+@media (max-width: 781px) {
+	.woocommerce-account .woocommerce {
+		grid-template-columns: 1fr;
+	}
+}

@@ -1,0 +1,82 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"color": {
+			"palette": [
+				{ "color": "#FFFFFF", "name": "Base", "slug": "base" },
+				{ "color": "#111827", "name": "Contrast", "slug": "contrast" },
+				{ "color": "#0F6B43", "name": "Primary green", "slug": "accent-1" },
+				{ "color": "#E8F1EC", "name": "Mint tint", "slug": "accent-2" },
+				{ "color": "#C0392B", "name": "Sale red", "slug": "accent-3" },
+				{ "color": "#6B7280", "name": "Muted text", "slug": "accent-4" },
+				{ "color": "#F9FAFB", "name": "Panel", "slug": "accent-5" },
+				{ "color": "#E5E7EB", "name": "Border", "slug": "accent-6" }
+			]
+		},
+		"layout": {
+			"contentSize": "760px",
+			"wideSize": "1200px"
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"name": "Hind Siliguri",
+					"slug": "hind-siliguri",
+					"fontFamily": "\"Hind Siliguri\", sans-serif"
+				},
+				{
+					"name": "Noto Serif Bengali",
+					"slug": "noto-serif-bengali",
+					"fontFamily": "\"Noto Serif Bengali\", Georgia, serif"
+				}
+			]
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var:preset|color|base",
+			"text": "var:preset|color|contrast"
+		},
+		"typography": {
+			"fontFamily": "var:preset|font-family|hind-siliguri",
+			"fontSize": "var:preset|font-size|medium",
+			"fontWeight": "400",
+			"letterSpacing": "0",
+			"lineHeight": "1.7"
+		},
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontFamily": "var:preset|font-family|noto-serif-bengali",
+					"fontWeight": "600",
+					"lineHeight": "1.35",
+					"letterSpacing": "0"
+				}
+			},
+			"h1": { "typography": { "fontSize": "var:preset|font-size|x-large" } },
+			"h2": { "typography": { "fontSize": "var:preset|font-size|large" } },
+			"h3": { "typography": { "fontSize": "var:preset|font-size|medium" } },
+			"link": {
+				"color": { "text": "var:preset|color|accent-1" }
+			},
+			"button": {
+				"color": {
+					"background": "var:preset|color|accent-1",
+					"text": "var:preset|color|base"
+				},
+				"border": { "radius": "4px" },
+				"spacing": {
+					"padding": { "top": "0.6rem", "bottom": "0.6rem", "left": "1.4rem", "right": "1.4rem" }
+				},
+				"typography": { "fontSize": "var:preset|font-size|small", "fontWeight": "500" },
+				":hover": {
+					"color": {
+						"background": "var:preset|color|contrast",
+						"text": "var:preset|color|base"
+					}
+				}
+			}
+		}
+	}
+}
