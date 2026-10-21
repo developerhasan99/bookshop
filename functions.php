@@ -4,7 +4,7 @@
  */
 
 function bookshop_fonts_url() {
-	return 'https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Noto+Serif+Bengali:wght@500;600;700&display=swap';
+	return 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Tiro+Bangla:ital@0;1&family=Noto+Serif+Bengali:wght@500;600;700&display=swap';
 }
 
 add_action(
@@ -13,7 +13,7 @@ add_action(
 		wp_enqueue_style( 'bookshop-fonts', bookshop_fonts_url(), array(), null );
 		wp_enqueue_style( 'bookshop-style', get_stylesheet_uri(), array( 'twentytwentyfive-style' ), filemtime( get_theme_file_path( 'style.css' ) ) );
 		wp_enqueue_script( 'bookshop-live-search', get_theme_file_uri( 'assets/live-search.js' ), array(), filemtime( get_theme_file_path( 'assets/live-search.js' ) ), array( 'strategy' => 'defer' ) );
-		wp_add_inline_script( 'bookshop-live-search', 'const bookshopSearch = ' . wp_json_encode( array( 'api' => rest_url( 'wc/store/v1/products' ) ) ) . ';', 'before' );
+		wp_add_inline_script( 'bookshop-live-search', 'const bookshopSearch = ' . wp_json_encode( array( 'api' => rest_url( 'bookshop/v1/search' ) ) ) . ';', 'before' );
 	}
 );
 
@@ -90,7 +90,7 @@ add_filter(
 	2
 );
 
-// Product search also matches product tag names (live search + results page).
+// Product search also matches tag and author (pa_writer) names (live search + results page).
 add_filter(
 	'posts_search',
 	function ( $search, $query ) {
@@ -104,7 +104,7 @@ add_filter(
 		$main = $tail ? substr( $search, 0, -strlen( $pw ) ) : $search;
 		$ids  = $wpdb->prepare(
 			"SELECT tr.object_id FROM {$wpdb->term_relationships} tr
-			INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.taxonomy = 'product_tag'
+			INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.taxonomy IN ( 'product_tag', 'pa_writer' )
 			INNER JOIN {$wpdb->terms} t ON t.term_id = tt.term_id
 			WHERE t.name LIKE %s",
 			'%' . $wpdb->esc_like( $query->get( 's' ) ) . '%'
@@ -148,4 +148,186 @@ add_filter(
 	},
 	10,
 	2
+);
+
+// ---------- Book authors: the "লেখক" attribute (pa_writer) ----------
+
+function bookshop_bn_digits( $n ) {
+	return strtr( (string) $n, array_combine( range( 0, 9 ), array( '০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯' ) ) );
+}
+
+// Author photo, or a circle with the first letter when none is set.
+function bookshop_writer_image( $term, $size = 'thumbnail' ) {
+	$id = (int) get_term_meta( $term->term_id, 'writer_image', true );
+	if ( $id ) {
+		return wp_get_attachment_image( $id, $size, false, array( 'class' => 'bookshop-writer-img', 'alt' => $term->name ) );
+	}
+	return '<span class="bookshop-writer-img is-empty" aria-hidden="true">' . esc_html( mb_substr( $term->name, 0, 1 ) ) . '</span>';
+}
+
+// Admin: photo picker on the author edit screen (Products → Attributes → লেখক → Configure terms → Edit).
+add_action(
+	'pa_writer_edit_form_fields',
+	function ( $term ) {
+		$id = (int) get_term_meta( $term->term_id, 'writer_image', true );
+		?>
+		<tr class="form-field">
+			<th scope="row"><label>লেখকের ছবি</label></th>
+			<td class="bookshop-writer-field">
+				<input type="hidden" name="writer_image" value="<?php echo esc_attr( $id ?: '' ); ?>">
+				<div class="bookshop-writer-preview"><?php echo $id ? wp_get_attachment_image( $id, 'thumbnail' ) : ''; ?></div>
+				<button type="button" class="button bookshop-writer-pick">ছবি বাছাই করুন</button>
+				<button type="button" class="button-link-delete bookshop-writer-remove">মুছুন</button>
+				<p class="description">জীবনী লিখুন উপরের "Description" ঘরে।</p>
+			</td>
+		</tr>
+		<?php
+	}
+);
+
+add_action(
+	'admin_enqueue_scripts',
+	function () {
+		$screen = get_current_screen();
+		if ( ! $screen || 'term' !== $screen->base || 'pa_writer' !== $screen->taxonomy ) {
+			return;
+		}
+		wp_enqueue_media();
+		wp_add_inline_script(
+			'media-editor',
+			"jQuery( function ( $ ) {
+				$( document ).on( 'click', '.bookshop-writer-pick', function () {
+					const field = $( this ).closest( '.bookshop-writer-field' );
+					const frame = wp.media( { title: 'লেখকের ছবি', library: { type: 'image' }, multiple: false } );
+					frame.on( 'select', function () {
+						const img = frame.state().get( 'selection' ).first().toJSON();
+						field.find( 'input' ).val( img.id );
+						field.find( '.bookshop-writer-preview' ).html( $( '<img width=\"96\">' ).attr( 'src', ( img.sizes.thumbnail || img ).url ) );
+					} );
+					frame.open();
+				} );
+				$( document ).on( 'click', '.bookshop-writer-remove', function () {
+					const field = $( this ).closest( '.bookshop-writer-field' );
+					field.find( 'input' ).val( '' );
+					field.find( '.bookshop-writer-preview' ).empty();
+				} );
+			} );"
+		);
+	}
+);
+
+// Core verifies the edit-term nonce before this runs; quick edit doesn't post the field, so it's left alone.
+add_action(
+	'edited_pa_writer',
+	function ( $term_id ) {
+		if ( ! isset( $_POST['writer_image'] ) || ! current_user_can( 'edit_term', $term_id ) ) {
+			return;
+		}
+		$id = absint( $_POST['writer_image'] );
+		if ( $id ) {
+			update_term_meta( $term_id, 'writer_image', $id );
+		} else {
+			delete_term_meta( $term_id, 'writer_image' );
+		}
+	}
+);
+
+// Author page: replace the plain title with photo, name, book count and bio.
+add_filter(
+	'render_block_core/query-title',
+	function ( $html ) {
+		if ( ! is_tax( 'pa_writer' ) ) {
+			return $html;
+		}
+		$term = get_queried_object();
+		$bio  = term_description( $term );
+		return sprintf(
+			'<div class="bookshop-writer-head alignwide">%s<div><h1 class="wp-block-query-title">%s</h1><p class="bookshop-writer-count">%s টি বই</p>%s</div></div>',
+			bookshop_writer_image( $term, 'medium' ),
+			esc_html( $term->name ),
+			esc_html( bookshop_bn_digits( $term->count ) ),
+			$bio ? '<div class="bookshop-writer-bio">' . $bio . '</div>' : ''
+		);
+	}
+);
+add_filter(
+	'render_block_core/term-description',
+	function ( $html ) {
+		return is_tax( 'pa_writer' ) ? '' : $html; // Already shown in the author header.
+	}
+);
+
+// Author name(s) under the product title, on cards and the single book page.
+add_filter(
+	'render_block_core/post-title',
+	function ( $html, $block, $instance ) {
+		$id = $instance->context['postId'] ?? 0;
+		if ( ! $id || 'product' !== get_post_type( $id ) ) {
+			return $html;
+		}
+		$terms = get_the_terms( $id, 'pa_writer' );
+		if ( ! $terms || is_wp_error( $terms ) ) {
+			return $html;
+		}
+		$links = array_map(
+			fn( $t ) => sprintf( '<a href="%s">%s</a>', esc_url( get_term_link( $t ) ), esc_html( $t->name ) ),
+			$terms
+		);
+		return $html . '<p class="bookshop-writer">' . implode( ', ', $links ) . '</p>';
+	},
+	10,
+	3
+);
+
+// Live search endpoint. Uses the normal WordPress search (title, descriptions, tags, writers),
+// unlike the Store API, which only matches titles and SKUs.
+add_action(
+	'rest_api_init',
+	function () {
+		register_rest_route(
+			'bookshop/v1',
+			'/search',
+			array(
+				'methods'             => 'GET',
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'search' => array(
+						'type'     => 'string',
+						'required' => true,
+					),
+				),
+				'callback'            => function ( $request ) {
+					$query = new WP_Query(
+						array(
+							'post_type'      => 'product',
+							'post_status'    => 'publish',
+							's'              => $request['search'],
+							'posts_per_page' => 6,
+							'no_found_rows'  => true,
+							'tax_query'      => array(
+								array(
+									'taxonomy' => 'product_visibility',
+									'field'    => 'name',
+									'terms'    => array( 'exclude-from-search' ),
+									'operator' => 'NOT IN',
+								),
+							),
+						)
+					);
+					return array_map(
+						function ( $post ) {
+							$product = wc_get_product( $post );
+							return array(
+								'name'       => $product->get_name(),
+								'permalink'  => $product->get_permalink(),
+								'image'      => wp_get_attachment_image_url( $product->get_image_id(), 'thumbnail' ) ?: '',
+								'price_html' => $product->get_price_html(),
+							);
+						},
+						$query->posts
+					);
+				},
+			)
+		);
+	}
 );

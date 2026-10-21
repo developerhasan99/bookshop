@@ -23,12 +23,12 @@
 				{
 					"name": "Tiro Bangla",
 					"slug": "tiro-bangla",
-					"fontFamily": "\"Tiro Bangla\", serif"
+					"fontFamily": "Roboto, \"Tiro Bangla\", serif"
 				},
 				{
 					"name": "Noto Serif Bengali",
 					"slug": "noto-serif-bengali",
-					"fontFamily": "\"Noto Serif Bengali\", Georgia, serif"
+					"fontFamily": "Roboto, \"Noto Serif Bengali\", serif"
 				}
 			]
 		}

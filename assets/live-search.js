@@ -1,4 +1,4 @@
-// Live product search for the header search box, via the WooCommerce Store API.
+// Live product search for the header search box (endpoint in functions.php).
 document.querySelectorAll( '.bookshop-search' ).forEach( ( form ) => {
 	const input = form.querySelector( 'input[type="search"]' );
 	const box = document.createElement( 'div' );
@@ -20,7 +20,7 @@ document.querySelectorAll( '.bookshop-search' ).forEach( ( form ) => {
 			const a = document.createElement( 'a' );
 			a.href = p.permalink;
 			a.innerHTML = '<img alt="" loading="lazy"><span><strong></strong><span class="price"></span></span>';
-			a.querySelector( 'img' ).src = p.images[ 0 ]?.thumbnail || '';
+			a.querySelector( 'img' ).src = p.image;
 			a.querySelector( 'strong' ).textContent = decode( p.name );
 			a.querySelector( '.price' ).innerHTML = p.price_html; // WooCommerce-generated markup.
 			box.append( a );
@@ -46,7 +46,7 @@ document.querySelectorAll( '.bookshop-search' ).forEach( ( form ) => {
 			ctrl?.abort();
 			ctrl = new AbortController();
 			try {
-				const url = bookshopSearch.api + '?per_page=6&search=' + encodeURIComponent( q );
+				const url = bookshopSearch.api + '?search=' + encodeURIComponent( q );
 				render( await ( await fetch( url, { signal: ctrl.signal } ) ).json() );
 			} catch ( e ) {
 				if ( e.name !== 'AbortError' ) {

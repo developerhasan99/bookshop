@@ -352,6 +352,76 @@ a.bookshop-search__all {
 	background: #0B5234 !important;
 }
 
+/* ---------- Book authors ---------- */
+.wc-block-product .wp-block-post-title:has(+ .bookshop-writer) {
+	margin-bottom: 0.1rem !important;
+}
+.bookshop-writer {
+	margin: 0 0 0.35rem;
+	font-size: 0.85rem;
+	line-height: 1.5;
+	color: var(--wp--preset--color--accent-4);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.bookshop-writer a {
+	color: inherit;
+	text-decoration: none;
+}
+.bookshop-writer a:hover {
+	color: var(--wp--preset--color--accent-1);
+	text-decoration: underline;
+}
+.bookshop-writer-head {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+	margin-block: 1rem 2rem;
+	padding: 1.5rem;
+	background: var(--wp--preset--color--accent-5);
+	border: var(--bs-border);
+	border-radius: 12px;
+}
+.bookshop-writer-head .bookshop-writer-img {
+	flex: none;
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+.bookshop-writer-img.is-empty {
+	display: grid;
+	place-items: center;
+	background: var(--wp--preset--color--accent-2);
+	color: var(--wp--preset--color--accent-1);
+	font-family: var(--wp--preset--font-family--noto-serif-bengali);
+	font-size: 2.75rem;
+	font-weight: 600;
+}
+.bookshop-writer-head h1 {
+	margin: 0;
+}
+.bookshop-writer-count {
+	margin: 0.15rem 0 0;
+	font-size: var(--wp--preset--font-size--small);
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-writer-bio {
+	max-width: 65ch;
+	margin-top: 0.75rem;
+}
+.bookshop-writer-bio p {
+	margin: 0 0 0.5rem;
+}
+@media (max-width: 600px) {
+	.bookshop-writer-head {
+		flex-direction: column;
+		text-align: center;
+	}
+}
+
 /* ---------- Category tiles ---------- */
 .bookshop-tile {
 	border-radius: var(--bs-radius);
