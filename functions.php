@@ -11,8 +11,8 @@ add_action(
 	'wp_enqueue_scripts',
 	function () {
 		wp_enqueue_style( 'bookshop-fonts', bookshop_fonts_url(), array(), null );
-		wp_enqueue_style( 'bookshop-style', get_stylesheet_uri(), array( 'twentytwentyfive-style' ), wp_get_theme()->get( 'Version' ) );
-		wp_enqueue_script( 'bookshop-live-search', get_theme_file_uri( 'assets/live-search.js' ), array(), wp_get_theme()->get( 'Version' ), array( 'strategy' => 'defer' ) );
+		wp_enqueue_style( 'bookshop-style', get_stylesheet_uri(), array( 'twentytwentyfive-style' ), filemtime( get_theme_file_path( 'style.css' ) ) );
+		wp_enqueue_script( 'bookshop-live-search', get_theme_file_uri( 'assets/live-search.js' ), array(), filemtime( get_theme_file_path( 'assets/live-search.js' ) ), array( 'strategy' => 'defer' ) );
 		wp_add_inline_script( 'bookshop-live-search', 'const bookshopSearch = ' . wp_json_encode( array( 'api' => rest_url( 'wc/store/v1/products' ) ) ) . ';', 'before' );
 	}
 );
@@ -110,6 +110,41 @@ add_filter(
 			'%' . $wpdb->esc_like( $query->get( 's' ) ) . '%'
 		);
 		return preg_replace( '/^\s*AND\s*/', ' AND (', $main, 1 ) . " OR {$wpdb->posts}.ID IN ( $ids ))" . $tail;
+	},
+	10,
+	2
+);
+
+// Sale badge shows the discount, e.g. "-33%", instead of "Sale".
+add_filter(
+	'render_block_woocommerce/product-sale-badge',
+	function ( $html, $block, $instance ) {
+		$product = wc_get_product( $instance->context['postId'] ?? 0 );
+		if ( ! $html || ! $product || ! $product->is_type( 'simple' ) || ! $product->is_on_sale() ) {
+			return $html;
+		}
+		$regular = (float) $product->get_regular_price();
+		$sale    = (float) $product->get_sale_price();
+		if ( $regular <= 0 ) {
+			return $html;
+		}
+		return str_replace( '>Sale<', '>-' . round( 100 * ( $regular - $sale ) / $regular ) . '%<', $html );
+	},
+	10,
+	3
+);
+
+// Bangla labels for product card buttons.
+add_filter(
+	'gettext_woocommerce',
+	function ( $text, $original ) {
+		$labels = array(
+			'Add to cart'    => 'কার্টে যোগ করুন',
+			'%s in cart'     => 'কার্টে আছে (%s)',
+			'Read more'      => 'বিস্তারিত দেখুন',
+			'Select options' => 'অপশন বাছাই করুন',
+		);
+		return $labels[ $original ] ?? $text;
 	},
 	10,
 	2

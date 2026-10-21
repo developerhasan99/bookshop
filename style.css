@@ -253,53 +253,103 @@ a.bookshop-search__all {
 /* ---------- Product cards ---------- */
 .wc-block-product-template > li,
 .wc-block-product {
+	display: flex;
+	flex-direction: column;
 	background: #fff;
 	border: var(--bs-border);
 	border-radius: var(--bs-radius);
-	padding: 0.75rem;
+	padding: 0.625rem;
+}
+.wc-block-product:hover {
+	border-color: var(--wp--preset--color--accent-1);
+	box-shadow: 0 6px 20px rgb(17 24 39 / 0.08);
+}
+.wc-block-product .wc-block-components-product-image {
+	margin-bottom: 0 !important;
 }
 .wc-block-components-product-image img {
 	aspect-ratio: 1;
 	object-fit: cover !important;
 	background: var(--wp--preset--color--accent-5);
-	border-radius: 4px;
+	border-radius: 6px;
 }
 .wc-block-product .wp-block-post-title {
+	margin: 0.7rem 0 0.35rem !important;
 	font-family: var(--wp--preset--font-family--noto-serif-bengali);
+	font-size: 0.95rem !important;
 	font-weight: 600;
-	line-height: 1.45;
+	line-height: 1.5;
+	/* Two lines max so every card lines up. */
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
 }
 .wc-block-product .wp-block-post-title a {
 	color: var(--wp--preset--color--contrast);
 	text-decoration: none;
 }
+.wc-block-product .wp-block-post-title a:hover {
+	color: var(--wp--preset--color--accent-1);
+}
 .wc-block-components-product-price {
 	color: var(--wp--preset--color--contrast);
 	font-weight: 600;
 }
+.wc-block-product .wc-block-components-product-price {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0 0.5rem;
+	text-align: left;
+}
 .wc-block-components-product-price ins {
+	order: -1;
 	text-decoration: none;
+}
+.wc-block-product .wc-block-components-product-price ins,
+.wc-block-product .wc-block-components-product-price > .amount {
+	font-size: 1.05rem;
+	color: var(--wp--preset--color--accent-1);
 }
 .wc-block-components-product-price del {
 	color: var(--wp--preset--color--accent-4);
+	font-size: 0.85em;
 	font-weight: 400;
 }
 .wc-block-components-product-sale-badge {
-	background: var(--wp--preset--color--accent-3) !important;
+	background: #DC2626 !important;
 	color: #fff !important;
 	border: 0 !important;
-	border-radius: 3px !important;
+	border-radius: 4px !important;
+	padding: 0.2rem 0.45rem !important;
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+	font-size: 0.8rem !important;
+	font-weight: 700;
+	line-height: 1.4 !important;
+	letter-spacing: 0.02em;
+	text-transform: none !important;
+	box-shadow: 0 2px 6px rgb(220 38 38 / 0.35);
+}
+.wc-block-product .wp-block-woocommerce-product-button {
+	margin-top: auto;
+	padding-top: 0.75rem;
+	align-items: stretch !important;
+}
+.wc-block-product .wp-block-woocommerce-product-price {
+	margin-bottom: 0 !important;
 }
 .wc-block-product .wc-block-components-product-button__button {
 	width: 100%;
-	background: #fff !important;
-	color: var(--wp--preset--color--accent-1) !important;
-	border: 1px solid var(--wp--preset--color--accent-1) !important;
-	padding: 0.5rem 1rem !important;
-}
-.wc-block-product .wc-block-components-product-button__button:hover {
 	background: var(--wp--preset--color--accent-1) !important;
 	color: #fff !important;
+	border: 0 !important;
+	border-radius: 6px !important;
+	padding: 0.55rem 0.75rem !important;
+	font-weight: 500;
+}
+.wc-block-product .wc-block-components-product-button__button:hover {
+	background: #0B5234 !important;
 }
 
 /* ---------- Category tiles ---------- */
