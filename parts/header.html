@@ -5,24 +5,24 @@
 <!-- /wp:group -->
 
 <!-- wp:group {"align":"full","className":"bookshop-header","style":{"border":{"bottom":{"color":"var:preset|color|accent-6","width":"1px"}},"spacing":{"padding":{"left":"var:preset|spacing|30","right":"var:preset|spacing|30"}}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull bookshop-header" style="border-bottom-color:var(--wp--preset--color--accent-6);border-bottom-width:1px;padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><!-- wp:group {"align":"wide","style":{"spacing":{"padding":{"top":"1rem","bottom":"0.5rem"},"blockGap":"var:preset|spacing|40"}},"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
-<div class="wp-block-group alignwide" style="padding-top:1rem;padding-bottom:0.5rem"><!-- wp:group {"style":{"spacing":{"blockGap":"0.75rem"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<div class="wp-block-group alignfull bookshop-header" style="border-bottom-color:var(--wp--preset--color--accent-6);border-bottom-width:1px;padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><!-- wp:group {"align":"wide","className":"bookshop-bar","style":{"spacing":{"padding":{"top":"0.875rem","bottom":"0.875rem"},"blockGap":"var:preset|spacing|40"}},"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
+<div class="wp-block-group alignwide bookshop-bar" style="padding-top:0.875rem;padding-bottom:0.875rem"><!-- wp:group {"style":{"spacing":{"blockGap":"0.75rem"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 <div class="wp-block-group"><!-- wp:site-logo {"width":110} /-->
 
 <!-- wp:site-title {"level":0,"fontSize":"large","fontFamily":"noto-serif-bengali"} /--></div>
 <!-- /wp:group -->
 
-<!-- wp:search {"label":"বই খুঁজুন","showLabel":false,"placeholder":"বই খুঁজুন…","width":560,"widthUnit":"px","buttonText":"খুঁজুন","buttonPosition":"button-inside","query":{"post_type":"product"}} /-->
+<!-- wp:search {"className":"bookshop-search","label":"বই খুঁজুন","showLabel":false,"placeholder":"বই খুঁজুন…","width":560,"widthUnit":"px","buttonText":"খুঁজুন","buttonPosition":"button-inside","query":{"post_type":"product"}} /-->
 
-<!-- wp:group {"style":{"spacing":{"blockGap":"0.25rem"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
-<div class="wp-block-group"><!-- wp:woocommerce/customer-account {"displayStyle":"icon_only","iconStyle":"line","iconClass":"wc-block-customer-account__account-icon"} /-->
+<!-- wp:group {"className":"bookshop-actions","style":{"spacing":{"blockGap":"0.25rem"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<div class="wp-block-group bookshop-actions"><!-- wp:woocommerce/customer-account {"displayStyle":"icon_only","iconStyle":"line","iconClass":"wc-block-customer-account__account-icon"} /-->
 
 <!-- wp:woocommerce/mini-cart /--></div>
 <!-- /wp:group --></div>
 <!-- /wp:group -->
 
-<!-- wp:group {"align":"wide","style":{"spacing":{"padding":{"bottom":"0.75rem"}}},"layout":{"type":"default"}} -->
-<div class="wp-block-group alignwide" style="padding-bottom:0.75rem"><!-- wp:navigation {"className":"bookshop-nav","overlayMenu":"mobile","style":{"spacing":{"blockGap":"var:preset|spacing|40"},"typography":{"fontWeight":"500"}},"fontSize":"small"} -->
+<!-- wp:group {"align":"wide","layout":{"type":"default"}} -->
+<div class="wp-block-group alignwide"><!-- wp:navigation {"className":"bookshop-nav","overlayMenu":"never","style":{"spacing":{"blockGap":"var:preset|spacing|40"},"typography":{"fontWeight":"500"}},"fontSize":"small"} -->
 <!-- wp:navigation-link {"label":"সকল বই","url":"/shop/","kind":"custom"} /-->
 <!-- wp:navigation-link {"label":"কম্বো প্যাকেজ","url":"/product-category/special-combo-pack/","kind":"custom"} /-->
 <!-- wp:navigation-link {"label":"ভৌতিক বই","url":"/product-category/horror-book/","kind":"custom"} /-->

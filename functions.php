@@ -64,3 +64,26 @@ add_action(
 		echo '</div>';
 	}
 );
+
+// Mark the nav link for the current page (custom links don't get this from core).
+add_filter(
+	'render_block_core/navigation-link',
+	function ( $html, $block ) {
+		$url = $block['attrs']['url'] ?? '';
+		if ( ! $url ) {
+			return $html;
+		}
+		$here = trailingslashit( wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ) );
+		$link = trailingslashit( wp_parse_url( $url, PHP_URL_PATH ) );
+		if ( strtolower( $here ) !== strtolower( $link ) ) {
+			return $html;
+		}
+		$p = new WP_HTML_Tag_Processor( $html );
+		if ( $p->next_tag( 'a' ) ) {
+			$p->set_attribute( 'aria-current', 'page' );
+		}
+		return $p->get_updated_html();
+	},
+	10,
+	2
+);

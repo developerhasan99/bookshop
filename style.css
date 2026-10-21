@@ -2,7 +2,7 @@
 Theme Name: Bookshop
 Template: twentytwentyfive
 Description: Classic, minimal Bangla book store. Child theme of Twenty Twenty-Five.
-Version: 1.4
+Version: 1.5
 Text Domain: bookshop
 */
 
@@ -23,24 +23,111 @@ Text Domain: bookshop
 	border-radius: var(--bs-radius);
 }
 
+/* Focus ring for keyboard users only, not on mouse click. */
+.wp-site-blocks :focus:not(:focus-visible) {
+	outline: none;
+}
+
 /* ---------- Header ---------- */
+/* Show the logo or the site title, not both. */
+.bookshop-header :has(> .wp-block-site-logo) > .wp-block-site-title {
+	display: none;
+}
+.bookshop-bar {
+	align-items: center;
+}
+.bookshop-search {
+	flex: 1 1 320px;
+	max-width: 560px;
+}
 .bookshop-header .wp-block-search__inside-wrapper {
+	width: 100% !important;
 	border: var(--bs-border);
 	border-radius: 6px;
+	box-sizing: border-box;
+	height: 44px;
 	padding: 3px;
+	align-items: stretch;
 	background: var(--wp--preset--color--accent-5);
+}
+.bookshop-header .wp-block-search__inside-wrapper:focus-within {
+	border-color: var(--wp--preset--color--accent-1);
+	background: var(--wp--preset--color--base);
+	box-shadow: 0 0 0 3px var(--wp--preset--color--accent-2);
 }
 .bookshop-header .wp-block-search__input {
 	border: 0;
 	background: transparent;
-	padding: 0.35rem 0.8rem;
+	min-height: 0;
+	padding: 0 0.8rem;
+	font-size: 0.95rem;
+	outline: none;
 }
 .bookshop-header .wp-block-search__button {
 	border-radius: 4px;
-	padding: 0.35rem 1rem;
+	padding: 0 1.1rem;
+	line-height: 1;
 }
-.bookshop-nav a:hover {
+
+/* Account + cart: 40px tap targets. */
+.bookshop-actions > * > a,
+.bookshop-actions .wc-block-mini-cart__button {
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	border-radius: 50%;
+	color: var(--wp--preset--color--contrast);
+}
+.bookshop-actions > * > a:hover,
+.bookshop-actions .wc-block-mini-cart__button:hover {
+	background: var(--wp--preset--color--accent-5);
+}
+.bookshop-actions .wc-block-mini-cart__badge {
+	background: var(--wp--preset--color--accent-1) !important;
+	color: #fff !important;
+	border: 2px solid var(--wp--preset--color--base);
+}
+
+/* Category nav: one row, swipe on small screens. */
+.bookshop-nav {
+	border-top: var(--bs-border);
+}
+.bookshop-bar + .alignwide {
+	margin-top: 0 !important;
+}
+.bookshop-nav .wp-block-navigation__container {
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	scrollbar-width: none;
+	white-space: nowrap;
+}
+.bookshop-nav a {
+	display: block;
+	padding: 0.7rem 0;
+	box-shadow: inset 0 -2px 0 transparent;
+	text-decoration: none !important;
+}
+.bookshop-nav a:hover,
+.bookshop-nav a[aria-current="page"] {
 	color: var(--wp--preset--color--accent-1);
+	box-shadow: inset 0 -2px 0 var(--wp--preset--color--accent-1);
+}
+
+@media (max-width: 781px) {
+	.bookshop-header .site-logo-img,
+	.bookshop-header .wp-block-site-logo img {
+		max-width: 96px;
+	}
+	.bookshop-search {
+		order: 3;
+		flex-basis: 100%;
+		max-width: none;
+	}
+	.bookshop-bar {
+		row-gap: 0.75rem !important;
+	}
 }
 
 /* ---------- Hero ---------- */
