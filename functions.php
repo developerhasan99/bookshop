@@ -13,6 +13,7 @@ add_action(
 		wp_enqueue_style( 'bookshop-fonts', bookshop_fonts_url(), array(), null );
 		wp_enqueue_style( 'bookshop-style', get_stylesheet_uri(), array(), filemtime( get_theme_file_path( 'style.css' ) ) );
 		wp_enqueue_script( 'bookshop-live-search', get_theme_file_uri( 'assets/live-search.js' ), array(), filemtime( get_theme_file_path( 'assets/live-search.js' ) ), array( 'strategy' => 'defer' ) );
+		wp_enqueue_script( 'bookshop-add-to-cart-loading', get_theme_file_uri( 'assets/add-to-cart-loading.js' ), array(), filemtime( get_theme_file_path( 'assets/add-to-cart-loading.js' ) ), array( 'strategy' => 'defer' ) );
 		wp_add_inline_script( 'bookshop-live-search', 'const bookshopSearch = ' . wp_json_encode( array( 'api' => rest_url( 'bookshop/v1/search' ) ) ) . ';', 'before' );
 	}
 );
@@ -151,6 +152,13 @@ add_filter(
 			'%s in cart'     => 'কার্টে আছে (%s)',
 			'Read more'      => 'বিস্তারিত দেখুন',
 			'Select options' => 'অপশন বাছাই করুন',
+			// Mini-cart drawer.
+			'Your cart'                                               => 'আপনার কার্ট',
+			'(items: %d)'                                             => '· %d',
+			'Save %s'                                                 => '%s সাশ্রয়',
+			'Remove item'                                             => 'মুছে ফেলুন',
+			'View cart'                                               => 'কার্ট দেখুন',
+			'Go to checkout'                                          => 'চেকআউট করুন',
 			// Checkout.
 			'Billing &amp; Shipping'                                  => 'ডেলিভারি তথ্য',
 			'Billing details'                                         => 'ডেলিভারি তথ্য',

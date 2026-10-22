@@ -690,6 +690,11 @@
 			"area": "uncategorized",
 			"name": "product-archive",
 			"title": "Product Archive"
+		},
+		{
+			"area": "mini-cart",
+			"name": "mini-cart",
+			"title": "Mini-Cart"
 		}
 	]
 }
