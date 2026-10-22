@@ -143,6 +143,24 @@ add_filter(
 			'%s in cart'     => 'কার্টে আছে (%s)',
 			'Read more'      => 'বিস্তারিত দেখুন',
 			'Select options' => 'অপশন বাছাই করুন',
+			// Checkout.
+			'Billing &amp; Shipping'                                  => 'ডেলিভারি তথ্য',
+			'Billing details'                                         => 'ডেলিভারি তথ্য',
+			'Additional information'                                  => 'অতিরিক্ত তথ্য',
+			'Order notes'                                             => 'অর্ডার নোট',
+			'Notes about your order, e.g. special notes for delivery.' => 'ডেলিভারি নিয়ে কোনো নির্দেশনা থাকলে লিখুন',
+			'optional'                                                => 'ঐচ্ছিক',
+			'Your order'                                              => 'অর্ডার সারাংশ',
+			'Subtotal'                                                => 'সাবটোটাল',
+			'Total'                                                   => 'মোট',
+			'Place order'                                             => 'অর্ডার কনফার্ম করুন',
+			'Have a coupon?'                                          => 'কুপন কোড আছে?',
+			'Click here to enter your code'                           => 'এখানে লিখুন',
+			'If you have a coupon code, please apply it below.'       => 'আপনার কুপন কোডটি নিচে লিখুন।',
+			'Coupon code'                                             => 'কুপন কোড',
+			'Apply coupon'                                            => 'প্রয়োগ করুন',
+			'I have read and agree to the website %s'                 => 'আমি ওয়েবসাইটের %s পড়েছি ও সম্মত আছি',
+			'terms and conditions'                                    => 'শর্তাবলী',
 		);
 		return $labels[ $original ] ?? $text;
 	},
@@ -329,5 +347,77 @@ add_action(
 				},
 			)
 		);
+	}
+);
+
+// ---------- Checkout: Shopify-style two columns (classic checkout) ----------
+// Left: delivery details + payment. Right: order summary. Layout is in style.css.
+add_action(
+	'wp',
+	function () {
+		if ( ! is_checkout() ) {
+			return;
+		}
+		remove_action( 'woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20 );
+		add_action(
+			'woocommerce_checkout_before_customer_details',
+			function () {
+				echo '<div class="bookshop-co-main">';
+			}
+		);
+		add_action(
+			'woocommerce_checkout_after_customer_details',
+			function () {
+				echo '<h3 class="bookshop-co-heading">পেমেন্ট</h3>';
+				woocommerce_checkout_payment(); // AJAX refreshes find it by class, wherever it sits.
+				echo '</div>';
+			}
+		);
+		add_action(
+			'woocommerce_checkout_before_order_review_heading',
+			function () {
+				echo '<aside class="bookshop-co-summary"><div class="bookshop-co-summary__inner">';
+			}
+		);
+		add_action(
+			'woocommerce_checkout_after_order_review',
+			function () {
+				echo '</div></aside>';
+			}
+		);
+	}
+);
+
+// Privacy text goes under the confirm button. On wp_loaded so it also applies to AJAX refreshes.
+add_action(
+	'wp_loaded',
+	function () {
+		remove_action( 'woocommerce_checkout_terms_and_conditions', 'wc_checkout_privacy_policy_text', 20 );
+		add_action( 'woocommerce_review_order_after_submit', 'wc_checkout_privacy_policy_text' );
+	}
+);
+
+// Order summary rows get a thumbnail with a quantity bubble.
+add_filter(
+	'woocommerce_cart_item_name',
+	function ( $name, $item ) {
+		if ( ! is_checkout() ) {
+			return $name;
+		}
+		return sprintf(
+			'<span class="bookshop-co-item"><span class="bookshop-co-thumb">%s<span class="bookshop-co-qty">%s</span></span><span class="bookshop-co-name">%s</span></span>',
+			$item['data']->get_image( 'thumbnail' ),
+			esc_html( bookshop_bn_digits( $item['quantity'] ) ),
+			$name
+		);
+	},
+	10,
+	2
+);
+
+add_filter(
+	'woocommerce_shipping_package_name',
+	function () {
+		return 'ডেলিভারি চার্জ';
 	}
 );
