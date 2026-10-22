@@ -1,14 +1,46 @@
 /*
 Theme Name: Bookshop
-Template: twentytwentyfive
-Description: Classic, minimal Bangla book store. Child theme of Twenty Twenty-Five.
-Version: 1.5
+Author: Mehedi Hasan
+Description: Classic, minimal Bangla book store block theme for WooCommerce.
+Requires at least: 6.7
+Requires PHP: 7.4
+Version: 2.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: bookshop
 */
 
 :root {
 	--bs-border: 1px solid var(--wp--preset--color--accent-6);
 	--bs-radius: 8px;
+}
+
+/* ---------- Base (carried over from Twenty Twenty-Five) ---------- */
+a {
+	text-decoration-thickness: 1px !important;
+	text-underline-offset: 0.1em;
+}
+:where(.wp-site-blocks *:focus) {
+	outline-width: 2px;
+	outline-style: solid;
+}
+.wp-block-navigation .wp-block-navigation-submenu .wp-block-navigation-item:not(:last-child) {
+	margin-bottom: 3px;
+}
+.wp-block-navigation .wp-block-navigation-item .wp-block-navigation-item__content {
+	outline-offset: 4px;
+}
+.wp-block-navigation .wp-block-navigation-item ul.wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+	outline-offset: 0;
+}
+h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
+	text-wrap: pretty;
+}
+.more-link {
+	display: block;
+}
+:where(pre) {
+	overflow-x: auto;
 }
 
 /* Keep it calm: no motion. */
@@ -81,7 +113,7 @@ Text Domain: bookshop
 }
 
 /* Live search dropdown (assets/live-search.js). */
-.bookshop-search {
+.bookshop-header .wp-block-search {
 	position: relative;
 }
 .bookshop-search__results {

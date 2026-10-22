@@ -11,7 +11,7 @@ add_action(
 	'wp_enqueue_scripts',
 	function () {
 		wp_enqueue_style( 'bookshop-fonts', bookshop_fonts_url(), array(), null );
-		wp_enqueue_style( 'bookshop-style', get_stylesheet_uri(), array( 'twentytwentyfive-style' ), filemtime( get_theme_file_path( 'style.css' ) ) );
+		wp_enqueue_style( 'bookshop-style', get_stylesheet_uri(), array(), filemtime( get_theme_file_path( 'style.css' ) ) );
 		wp_enqueue_script( 'bookshop-live-search', get_theme_file_uri( 'assets/live-search.js' ), array(), filemtime( get_theme_file_path( 'assets/live-search.js' ) ), array( 'strategy' => 'defer' ) );
 		wp_add_inline_script( 'bookshop-live-search', 'const bookshopSearch = ' . wp_json_encode( array( 'api' => rest_url( 'bookshop/v1/search' ) ) ) . ';', 'before' );
 	}

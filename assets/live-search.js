@@ -1,5 +1,6 @@
 // Live product search for the header search box (endpoint in functions.php).
-document.querySelectorAll( '.bookshop-search' ).forEach( ( form ) => {
+// Any search block in the header, so a re-added block keeps working without the class.
+document.querySelectorAll( '.bookshop-search, .bookshop-header form.wp-block-search' ).forEach( ( form ) => {
 	const input = form.querySelector( 'input[type="search"]' );
 	const box = document.createElement( 'div' );
 	box.className = 'bookshop-search__results';
