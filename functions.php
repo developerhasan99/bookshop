@@ -17,6 +17,14 @@ add_action(
 	}
 );
 
+// Product card block: blocks/product-card (layout in card.html).
+add_action(
+	'init',
+	function () {
+		register_block_type( get_theme_file_path( 'blocks/product-card' ) );
+	}
+);
+
 add_action(
 	'after_setup_theme',
 	function () {

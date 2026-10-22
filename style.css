@@ -292,6 +292,12 @@ a.bookshop-search__all {
 	border-radius: var(--bs-radius);
 	padding: 0.625rem;
 }
+/* The card block (blocks/product-card) fills the grid cell so the button sits at the bottom. */
+.wp-block-bookshop-product-card {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+}
 .wc-block-product:hover {
 	border-color: var(--wp--preset--color--accent-1);
 	box-shadow: 0 6px 20px rgb(17 24 39 / 0.08);
@@ -960,6 +966,10 @@ a.bookshop-search__all {
 }
 
 /* ---------- Footer ---------- */
+.bookshop-footer-links {
+	padding-left: 0;
+	list-style: none;
+}
 footer a {
 	text-decoration: none;
 }

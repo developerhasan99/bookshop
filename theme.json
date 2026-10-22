@@ -685,6 +685,11 @@
 			"area": "footer",
 			"name": "footer",
 			"title": "Footer"
+		},
+		{
+			"area": "uncategorized",
+			"name": "product-archive",
+			"title": "Product Archive"
 		}
 	]
 }

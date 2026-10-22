@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "bookshop/product-card",
+	"title": "Bookshop Product Card",
+	"category": "woocommerce",
+	"description": "The shop's product card. Its layout lives in the theme file blocks/product-card/card.html, so every product grid stays the same.",
+	"ancestor": [ "woocommerce/product-template" ],
+	"usesContext": [ "postId", "postType", "query", "queryId", "collection" ],
+	"supports": {
+		"html": false,
+		"reusable": false
+	},
+	"editorScript": "file:./editor.js",
+	"render": "file:./render.php"
+}
