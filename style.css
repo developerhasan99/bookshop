@@ -1096,6 +1096,374 @@ a.bookshop-search__all {
 	display: none;
 }
 
+/* ---------- Product page (templates/single-product.html) ---------- */
+.bookshop-product .woocommerce-breadcrumb {
+	margin-bottom: var(--wp--preset--spacing--30);
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-product .woocommerce-breadcrumb a {
+	color: inherit;
+	text-decoration: none;
+}
+.bookshop-product .woocommerce-breadcrumb a:hover {
+	color: var(--wp--preset--color--accent-1);
+}
+
+/* Gallery: image on a soft panel, discount badge top-left, small thumbnails below. */
+.bookshop-product-media .wp-block-woocommerce-product-image-gallery {
+	position: relative;
+}
+.bookshop-product-media .woocommerce-product-gallery__wrapper {
+	margin: 0;
+	overflow: hidden;
+	border: var(--bs-border);
+	border-radius: 12px;
+	background: var(--wp--preset--color--accent-5);
+}
+.bookshop-product-media .woocommerce-product-gallery__image img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+/* Beats WooCommerce's round olive .woocommerce span.onsale. */
+.bookshop-product .bookshop-product-media span.onsale {
+	position: absolute;
+	top: 0.9rem;
+	left: 0.9rem;
+	z-index: 2;
+	min-width: 0;
+	min-height: 0;
+	margin: 0;
+	padding: 0.25rem 0.6rem;
+	border-radius: 4px;
+	background: #DC2626;
+	color: #fff;
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 700;
+	line-height: 1.4;
+}
+.bookshop-product-media .flex-control-thumbs {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 0.5rem;
+	margin: 0.75rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+.bookshop-product-media .flex-control-thumbs img {
+	width: 100%;
+	border: var(--bs-border);
+	border-radius: 8px;
+	opacity: 0.6;
+	cursor: pointer;
+}
+.bookshop-product-media .flex-control-thumbs img.flex-active,
+.bookshop-product-media .flex-control-thumbs img:hover {
+	border-color: var(--wp--preset--color--accent-1);
+	opacity: 1;
+}
+
+/* Summary column. */
+.bookshop-product-summary > * {
+	margin-block: 0 !important;
+}
+.bookshop-product-summary > * + * {
+	margin-top: 1rem !important;
+}
+.bookshop-product-summary .wp-block-post-title {
+	font-weight: 700;
+	line-height: 1.35;
+}
+.bookshop-product-summary .bookshop-writer {
+	margin-top: 0.35rem !important;
+	font-size: var(--wp--preset--font-size--medium);
+}
+.bookshop-product-summary .bookshop-rating {
+	margin-top: 0.5rem !important;
+	font-size: var(--wp--preset--font-size--small);
+}
+.bookshop-product-summary .bookshop-rating a {
+	color: inherit;
+}
+.bookshop-product-summary .wc-block-components-product-price {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0 0.75rem;
+	font-weight: 700;
+}
+.bookshop-product-summary .wc-block-components-product-price ins {
+	order: -1;
+	color: var(--wp--preset--color--accent-1);
+	text-decoration: none;
+}
+.bookshop-product-summary .wc-block-components-product-price del {
+	font-size: var(--wp--preset--font-size--medium);
+	font-weight: 400;
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-save {
+	display: inline-block;
+	margin: 0.4rem 0 0;
+	padding: 0.15rem 0.6rem;
+	border-radius: 4px;
+	background: #FDECEC;
+	color: var(--wp--preset--color--accent-3);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+}
+.bookshop-product-excerpt {
+	padding: 0.85rem 1rem;
+	border: var(--bs-border);
+	border-radius: 10px;
+	background: var(--wp--preset--color--accent-5);
+}
+.bookshop-product-excerpt p {
+	margin: 0;
+}
+.bookshop-product-excerpt p + p {
+	margin-top: 0.5rem;
+}
+
+/* Quantity + add to cart + buy now. */
+.bookshop-product-summary form.cart {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	margin: 0;
+}
+/* WooCommerce's clearfix pseudo-elements become empty flex items (and take a gap) here. */
+.bookshop-product-summary form.cart::before,
+.bookshop-product-summary form.cart::after {
+	display: none !important;
+}
+.bookshop-product-summary form.cart .quantity,
+.bookshop-product-summary form.cart .quantity input.qty {
+	margin: 0 !important;
+	float: none !important;
+}
+.bookshop-product-summary form.cart .quantity input.qty {
+	box-sizing: border-box;
+	width: 4.5rem;
+	height: 48px;
+	border: var(--bs-border);
+	border-radius: 8px;
+	font-size: var(--wp--preset--font-size--medium);
+	text-align: center;
+}
+.bookshop-product-summary form.cart .button {
+	flex: 1 1 160px;
+	height: 48px;
+	margin: 0 !important;
+	padding: 0 1.25rem !important;
+	border-radius: 8px !important;
+	font-size: var(--wp--preset--font-size--medium) !important;
+	font-weight: 600;
+}
+.bookshop-product-summary .single_add_to_cart_button {
+	border: 2px solid var(--wp--preset--color--accent-1) !important;
+	background: #fff !important;
+	color: var(--wp--preset--color--accent-1) !important;
+}
+.bookshop-product-summary .single_add_to_cart_button:hover {
+	background: var(--wp--preset--color--accent-2) !important;
+}
+.bookshop-buy-now {
+	border: 2px solid var(--wp--preset--color--accent-1) !important;
+	background: var(--wp--preset--color--accent-1) !important;
+	color: #fff !important;
+}
+.bookshop-buy-now:hover {
+	background: #0B5234 !important;
+}
+.bookshop-product-summary .yith-add-to-wishlist-button-block {
+	margin-top: 0.75rem !important;
+	font-size: var(--wp--preset--font-size--small);
+}
+
+/* Delivery / payment / return box. */
+.bookshop-product-info {
+	margin: 1.25rem 0 0;
+	padding: 0;
+	border: var(--bs-border);
+	border-radius: 10px;
+	list-style: none;
+}
+.bookshop-product-info li {
+	display: grid;
+	grid-template-columns: 22px 1fr;
+	column-gap: 0.75rem;
+	align-items: center;
+	padding: 0.7rem 1rem;
+	font-size: var(--wp--preset--font-size--small);
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-product-info li + li {
+	border-top: var(--bs-border);
+}
+.bookshop-product-info li::before {
+	content: "";
+	grid-row: span 2;
+	width: 22px;
+	height: 22px;
+	background: var(--wp--preset--color--accent-1);
+	-webkit-mask: var(--icon) center / contain no-repeat;
+	mask: var(--icon) center / contain no-repeat;
+}
+.bookshop-product-info strong {
+	color: var(--wp--preset--color--contrast);
+	font-weight: 600;
+}
+.bookshop-product-info .is-truck {
+	--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M1 5h13v11H1zM14 9h4l4 4v3h-8z'/%3E%3Ccircle cx='5.5' cy='17.5' r='2'/%3E%3Ccircle cx='17.5' cy='17.5' r='2'/%3E%3C/svg%3E");
+}
+.bookshop-product-info .is-cash {
+	--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8'%3E%3Crect x='2' y='6' width='20' height='12' rx='2'/%3E%3Ccircle cx='12' cy='12' r='2.5'/%3E%3C/svg%3E");
+}
+.bookshop-product-info .is-return {
+	--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M3 12a9 9 0 1 0 3-6.7L3 8'/%3E%3Cpath d='M3 3v5h5'/%3E%3C/svg%3E");
+}
+.bookshop-product-summary .wp-block-woocommerce-product-meta {
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-product-summary .wp-block-post-terms a {
+	color: var(--wp--preset--color--contrast);
+}
+
+/* Details tabs: underline tabs over a bordered panel. */
+.bookshop-product-details {
+	margin-top: var(--wp--preset--spacing--60) !important;
+}
+.bookshop-product-details .woocommerce-tabs ul.tabs {
+	display: flex;
+	gap: 1.5rem;
+	margin: 0;
+	padding: 0;
+	border-bottom: var(--bs-border);
+	list-style: none;
+	overflow-x: auto;
+	scrollbar-width: none;
+}
+.bookshop-product-details .woocommerce-tabs ul.tabs li {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+}
+.bookshop-product-details .woocommerce-tabs ul.tabs li a {
+	display: block;
+	padding: 0.75rem 0;
+	color: var(--wp--preset--color--accent-4);
+	font-weight: 600;
+	white-space: nowrap;
+	text-decoration: none;
+	box-shadow: inset 0 -2px 0 transparent;
+}
+.bookshop-product-details .woocommerce-tabs ul.tabs li.active a,
+.bookshop-product-details .woocommerce-tabs ul.tabs li a:hover {
+	color: var(--wp--preset--color--accent-1);
+	box-shadow: inset 0 -2px 0 var(--wp--preset--color--accent-1);
+}
+.bookshop-product-details .woocommerce-Tabs-panel {
+	max-width: 760px;
+	padding: var(--wp--preset--spacing--30) 0 0;
+}
+/* The tab already names the panel. */
+.bookshop-product-details .woocommerce-Tabs-panel--description > h2:first-child,
+.bookshop-product-details .woocommerce-Tabs-panel--additional_information > h2:first-child {
+	display: none;
+}
+.bookshop-product-details .shop_attributes {
+	width: 100%;
+	border-collapse: collapse;
+	border: var(--bs-border);
+}
+.bookshop-product-details .shop_attributes :is(th, td) {
+	padding: 0.6rem 1rem;
+	border-bottom: var(--bs-border);
+	text-align: left;
+}
+.bookshop-product-details .shop_attributes th {
+	width: 35%;
+	background: var(--wp--preset--color--accent-5);
+	font-weight: 600;
+}
+.bookshop-product-details .shop_attributes p {
+	margin: 0;
+}
+
+/* "Recently ordered" strip (Code Snippets: [recently_ordered_books]). */
+/* The snippet prints outside the wide blocks, so match their width. */
+.bookshop-product .recently-ordered-global {
+	max-width: var(--wp--style--global--wide-size) !important;
+}
+.rob-section {
+	margin-top: var(--wp--preset--spacing--50);
+}
+.rob-heading h2 {
+	margin: 0;
+	font-family: var(--wp--preset--font-family--noto-serif-bengali);
+	font-weight: 700;
+}
+.rob-heading p {
+	margin: 0.25rem 0 var(--wp--preset--spacing--30);
+	color: var(--wp--preset--color--accent-4);
+}
+.rob-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 0.75rem;
+}
+.rob-card {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: var(--bs-border);
+	border-radius: 10px;
+	background: #fff;
+}
+.rob-cover img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1;
+	object-fit: cover;
+}
+.rob-info {
+	padding: 0.6rem 0.7rem 0.7rem;
+	font-size: var(--wp--preset--font-size--x-small);
+	color: var(--wp--preset--color--accent-4);
+}
+.rob-info h3 {
+	margin: 0 0 0.3rem;
+	font-size: var(--wp--preset--font-size--small);
+	line-height: 1.4;
+}
+.rob-info h3 a {
+	color: var(--wp--preset--color--contrast);
+	text-decoration: none;
+}
+.rob-info p {
+	margin: 0;
+}
+
+.bookshop-related {
+	margin-top: var(--wp--preset--spacing--60) !important;
+}
+
+@media (max-width: 781px) {
+	.bookshop-product-top {
+		gap: var(--wp--preset--spacing--30) !important;
+	}
+	/* Quantity + add to cart on one row, buy now full width below. */
+	.bookshop-buy-now {
+		flex-basis: 100% !important;
+	}
+	.rob-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
 /* ---------- Checkout & cart: bordered panels ---------- */
 .wp-block-woocommerce-checkout,
 .wp-block-woocommerce-cart {

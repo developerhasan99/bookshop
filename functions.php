@@ -124,39 +124,113 @@ add_filter(
 	2
 );
 
-// Sale badge shows the discount, e.g. "-33%", instead of "Sale".
+// Percent off for a simple product on sale, or 0.
+function bookshop_discount( $product ) {
+	if ( ! $product || ! $product->is_type( 'simple' ) || ! $product->is_on_sale() ) {
+		return 0;
+	}
+	$regular = (float) $product->get_regular_price();
+	return $regular > 0 ? (int) round( 100 * ( $regular - (float) $product->get_sale_price() ) / $regular ) : 0;
+}
+
+// Sale badges show the discount, e.g. "-33%", instead of "Sale": cards (block) and the product page gallery (classic flash).
 add_filter(
 	'render_block_woocommerce/product-sale-badge',
 	function ( $html, $block, $instance ) {
-		$product = wc_get_product( $instance->context['postId'] ?? 0 );
-		if ( ! $html || ! $product || ! $product->is_type( 'simple' ) || ! $product->is_on_sale() ) {
-			return $html;
-		}
-		$regular = (float) $product->get_regular_price();
-		$sale    = (float) $product->get_sale_price();
-		if ( $regular <= 0 ) {
-			return $html;
-		}
-		return str_replace( '>Sale<', '>-' . round( 100 * ( $regular - $sale ) / $regular ) . '%<', $html );
+		$off = bookshop_discount( wc_get_product( $instance->context['postId'] ?? 0 ) );
+		return $html && $off ? str_replace( '>Sale<', '>-' . $off . '%<', $html ) : $html;
+	},
+	10,
+	3
+);
+add_filter(
+	'woocommerce_sale_flash',
+	function ( $html, $post, $product ) {
+		$off = bookshop_discount( $product );
+		return $off ? '<span class="onsale">-' . $off . '%</span>' : $html;
 	},
 	10,
 	3
 );
 
-// Card stars: always shown, with the review count, e.g. ★★★★☆ (12). WooCommerce hides both on cards.
+// Product page: "৳১,১৬১ সাশ্রয় (৫৪%)" under the price.
+add_filter(
+	'render_block_woocommerce/product-price',
+	function ( $html, $block ) {
+		$product = wc_get_product( get_the_ID() );
+		$off     = bookshop_discount( $product );
+		if ( empty( $block['attrs']['isDescendentOfSingleProductTemplate'] ) || ! $off ) {
+			return $html;
+		}
+		$saved = (float) $product->get_regular_price() - (float) $product->get_sale_price();
+		return $html . sprintf( '<p class="bookshop-save">৳%s সাশ্রয় (%s%%)</p>', esc_html( bookshop_bn_digits( number_format( $saved ) ) ), esc_html( bookshop_bn_digits( $off ) ) );
+	},
+	10,
+	2
+);
+
+// Product gallery: no hover zoom or lightbox (thumbnail slider stays). WooCommerce adds both on template_redirect
+// (priority 10) and only loads their scripts if supported, so drop the support right after. The gallery block also
+// forces the JS flags on at priority 10; turn those off later.
+add_action(
+	'template_redirect',
+	function () {
+		remove_theme_support( 'wc-product-gallery-zoom' );
+		remove_theme_support( 'wc-product-gallery-lightbox' );
+	},
+	20
+);
+add_filter( 'woocommerce_single_product_zoom_enabled', '__return_false', 20 );
+add_filter( 'woocommerce_single_product_photoswipe_enabled', '__return_false', 20 );
+// Without the lightbox the image link would just open the raw file, so drop it.
+add_filter(
+	'woocommerce_single_product_image_thumbnail_html',
+	fn( $html ) => preg_replace( '#<a [^>]*>(.*?)</a>#s', '$1', $html )
+);
+
+// Product page: show the short description as written (core's excerpt block flattens its line breaks).
+add_filter(
+	'render_block_core/post-excerpt',
+	function ( $html ) {
+		$post = get_post();
+		if ( ! is_product() || ! $post || ! $post->post_excerpt || get_queried_object_id() !== $post->ID ) {
+			return $html;
+		}
+		return '<div class="wp-block-post-excerpt bookshop-product-excerpt">' . apply_filters( 'woocommerce_short_description', $post->post_excerpt ) . '</div>';
+	}
+);
+
+// Product page: "Buy now" next to add to cart. Posting the same form to the checkout adds the book and opens checkout.
+add_action(
+	'woocommerce_after_add_to_cart_button',
+	function () {
+		global $product;
+		if ( is_product() && $product && $product->is_type( 'simple' ) ) {
+			printf(
+				'<button type="submit" name="add-to-cart" value="%d" formaction="%s" class="bookshop-buy-now button wp-element-button">এখনই কিনুন</button>',
+				absint( $product->get_id() ),
+				esc_url( wc_get_checkout_url() )
+			);
+		}
+	}
+);
+
+// Stars always shown, with the review count, e.g. ★★★★☆ (12): on cards and the product page. WooCommerce hides them without reviews.
 add_filter(
 	'render_block_woocommerce/product-rating',
 	function ( $html, $block, $instance ) {
-		$product = wc_get_product( $instance->context['postId'] ?? 0 );
-		if ( empty( $block['attrs']['isDescendentOfQueryLoop'] ) || ! $product ) {
+		$single  = ! empty( $block['attrs']['isDescendentOfSingleProductTemplate'] );
+		$product = wc_get_product( $single ? get_the_ID() : ( $instance->context['postId'] ?? 0 ) );
+		if ( ! $product || ( ! $single && empty( $block['attrs']['isDescendentOfQueryLoop'] ) ) ) {
 			return $html;
 		}
 		$rating = (float) $product->get_average_rating();
+		$count  = bookshop_bn_digits( $product->get_review_count() );
 		return sprintf(
-			'<p class="bookshop-rating"><span class="bookshop-stars" style="--rating:%s%%" role="img" aria-label="%s"></span> (%s)</p>',
+			'<p class="bookshop-rating"><span class="bookshop-stars" style="--rating:%s%%" role="img" aria-label="%s"></span> %s</p>',
 			esc_attr( $rating * 20 ),
 			esc_attr( sprintf( '৫ এর মধ্যে %s', bookshop_bn_digits( $rating ) ) ),
-			esc_html( bookshop_bn_digits( $product->get_review_count() ) )
+			$single ? '<a href="#tab-reviews">' . esc_html( $count ) . 'টি রিভিউ</a>' : '(' . esc_html( $count ) . ')'
 		);
 	},
 	10,
@@ -172,6 +246,19 @@ add_filter(
 			'%s in cart'     => 'কার্টে আছে (%s)',
 			'Read more'      => 'বিস্তারিত দেখুন',
 			'Select options' => 'অপশন বাছাই করুন',
+			// Product page.
+			'Description'                                             => 'বিবরণ',
+			'Reviews'                                                 => 'রিভিউ',
+			'Reviews (%d)'                                            => 'রিভিউ (%d)',
+			'There are no reviews yet.'                               => 'এখনো কোনো রিভিউ নেই।',
+			'Be the first to review &ldquo;%s&rdquo;'                 => 'প্রথম রিভিউটি আপনিই লিখুন',
+			'Add a review'                                            => 'রিভিউ লিখুন',
+			'Your rating'                                             => 'আপনার রেটিং',
+			'Your review'                                             => 'আপনার রিভিউ',
+			'Submit'                                                  => 'জমা দিন',
+			'Name'                                                    => 'নাম',
+			'Email'                                                   => 'ইমেইল',
+			'Product quantity'                                        => 'পরিমাণ',
 			// Mini-cart drawer.
 			'Your cart'                                               => 'আপনার কার্ট',
 			'(items: %d)'                                             => '· %d',
@@ -242,9 +329,9 @@ add_shortcode(
 	function () {
 		$combos = array();
 		foreach ( wc_get_products( array( 'category' => array( 'special-combo-pack' ), 'status' => 'publish', 'limit' => -1 ) ) as $product ) {
-			$regular = (float) $product->get_regular_price();
-			if ( $product->is_on_sale() && $regular > 0 ) {
-				$combos[] = array( $product, round( 100 * ( $regular - (float) $product->get_sale_price() ) / $regular ) );
+			$off = bookshop_discount( $product );
+			if ( $off ) {
+				$combos[] = array( $product, $off );
 			}
 		}
 		usort( $combos, fn( $a, $b ) => $b[1] <=> $a[1] );
