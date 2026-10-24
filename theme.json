@@ -39,12 +39,12 @@
 					"slug": "accent-4"
 				},
 				{
-					"color": "#F9FAFB",
+					"color": "#F9FAFC",
 					"name": "Panel",
 					"slug": "accent-5"
 				},
 				{
-					"color": "#E5E7EB",
+					"color": "#E2E7EE",
 					"name": "Border",
 					"slug": "accent-6"
 				}

@@ -143,6 +143,26 @@ add_filter(
 	3
 );
 
+// Card stars: always shown, with the review count, e.g. ★★★★☆ (12). WooCommerce hides both on cards.
+add_filter(
+	'render_block_woocommerce/product-rating',
+	function ( $html, $block, $instance ) {
+		$product = wc_get_product( $instance->context['postId'] ?? 0 );
+		if ( empty( $block['attrs']['isDescendentOfQueryLoop'] ) || ! $product ) {
+			return $html;
+		}
+		$rating = (float) $product->get_average_rating();
+		return sprintf(
+			'<p class="bookshop-rating"><span class="bookshop-stars" style="--rating:%s%%" role="img" aria-label="%s"></span> (%s)</p>',
+			esc_attr( $rating * 20 ),
+			esc_attr( sprintf( '৫ এর মধ্যে %s', bookshop_bn_digits( $rating ) ) ),
+			esc_html( bookshop_bn_digits( $product->get_review_count() ) )
+		);
+	},
+	10,
+	3
+);
+
 // Bangla labels for product card buttons.
 add_filter(
 	'gettext_woocommerce',
@@ -198,6 +218,74 @@ function bookshop_writer_image( $term, $size = 'thumbnail' ) {
 	}
 	return '<span class="bookshop-writer-img is-empty" aria-hidden="true">' . esc_html( mb_substr( $term->name, 0, 1 ) ) . '</span>';
 }
+
+// Front page author strip: [bookshop_writers]. Arrows scroll the row; it also swipes on touch.
+add_shortcode(
+	'bookshop_writers',
+	function () {
+		$terms = get_terms( array( 'taxonomy' => 'pa_writer', 'orderby' => 'count', 'order' => 'DESC', 'number' => 20 ) );
+		if ( ! $terms || is_wp_error( $terms ) ) {
+			return '';
+		}
+		$items = '';
+		foreach ( $terms as $term ) {
+			$items .= sprintf( '<li><a href="%s">%s<span>%s</span></a></li>', esc_url( get_term_link( $term ) ), bookshop_writer_image( $term ), esc_html( $term->name ) );
+		}
+		$arrow = '<button type="button" class="bookshop-writers__%1$s" aria-label="%2$s" onclick="this.parentNode.querySelector(\'ul\').scrollBy({left:%3$s*this.parentNode.offsetWidth/2,behavior:\'smooth\'})"></button>';
+		return '<div class="bookshop-writers">' . sprintf( $arrow, 'prev', 'আগের লেখক', -1 ) . '<ul>' . $items . '</ul>' . sprintf( $arrow, 'next', 'পরের লেখক', 1 ) . '</div>';
+	}
+);
+
+// Front page combo offer: [bookshop_combos]. The three combo packs with the biggest discount, prices read live.
+add_shortcode(
+	'bookshop_combos',
+	function () {
+		$combos = array();
+		foreach ( wc_get_products( array( 'category' => array( 'special-combo-pack' ), 'status' => 'publish', 'limit' => -1 ) ) as $product ) {
+			$regular = (float) $product->get_regular_price();
+			if ( $product->is_on_sale() && $regular > 0 ) {
+				$combos[] = array( $product, round( 100 * ( $regular - (float) $product->get_sale_price() ) / $regular ) );
+			}
+		}
+		usort( $combos, fn( $a, $b ) => $b[1] <=> $a[1] );
+		$items = '';
+		foreach ( array_slice( $combos, 0, 3 ) as list( $product, $off ) ) {
+			$items .= sprintf(
+				'<li><a href="%s">%s<span><strong>%s</strong><span class="price">%s</span></span><em>%s%% ছাড়</em></a></li>',
+				esc_url( $product->get_permalink() ),
+				$product->get_image( 'thumbnail' ),
+				esc_html( $product->get_name() ),
+				$product->get_price_html(),
+				esc_html( bookshop_bn_digits( $off ) )
+			);
+		}
+		return $items ? '<ul class="bookshop-combos">' . $items . '</ul>' : '';
+	}
+);
+
+// Front page reader reviews: [bookshop_reviews]. Latest approved book reviews; the whole section is hidden until there is one.
+add_shortcode(
+	'bookshop_reviews',
+	function () {
+		$reviews = get_comments( array( 'post_type' => 'product', 'status' => 'approve', 'type' => 'review', 'number' => 3 ) );
+		if ( ! $reviews ) {
+			return '';
+		}
+		$items = '';
+		foreach ( $reviews as $review ) {
+			$rating = (int) get_comment_meta( $review->comment_ID, 'rating', true );
+			$items .= sprintf(
+				'<li>%s<p>%s</p><footer><strong>%s</strong><a href="%s">%s</a></footer></li>',
+				$rating ? sprintf( '<span class="bookshop-stars" style="--rating:%d%%" role="img" aria-label="৫ এর মধ্যে %s"></span>', $rating * 20, esc_attr( bookshop_bn_digits( $rating ) ) ) : '',
+				esc_html( wp_trim_words( $review->comment_content, 40 ) ),
+				esc_html( $review->comment_author ),
+				esc_url( get_permalink( $review->comment_post_ID ) ),
+				esc_html( get_the_title( $review->comment_post_ID ) )
+			);
+		}
+		return '<div class="bookshop-reviews alignwide"><div class="bookshop-section-head"><h2 class="wp-block-heading">পাঠকদের মতামত</h2></div><ul>' . $items . '</ul></div>';
+	}
+);
 
 // Admin: photo picker on the author edit screen (Products → Attributes → লেখক → Configure terms → Edit).
 add_action(

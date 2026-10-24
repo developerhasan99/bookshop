@@ -4,7 +4,7 @@ Author: Mehedi Hasan
 Description: Classic, minimal Bangla book store block theme for WooCommerce.
 Requires at least: 6.7
 Requires PHP: 7.4
-Version: 2.1
+Version: 2.2
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: bookshop
@@ -13,6 +13,7 @@ Text Domain: bookshop
 :root {
 	--bs-border: 1px solid var(--wp--preset--color--accent-6);
 	--bs-radius: 8px;
+	--bs-shadow-hover: 0 2px 4px rgb(16 24 40 / 0.06), 0 10px 28px rgb(16 24 40 / 0.1);
 }
 
 /* ---------- Base (carried over from Twenty Twenty-Five) ---------- */
@@ -65,15 +66,20 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 
 /* ---------- Header ---------- */
 /* Show the logo or the site title, not both. */
+.bookshop-header {
+	border-bottom: var(--bs-border);
+}
 .bookshop-header :has(> .wp-block-site-logo) > .wp-block-site-title {
 	display: none;
 }
 .bookshop-bar {
 	align-items: center;
 }
+.bookshop-bar-end {
+	flex: 0 1 460px;
+}
 .bookshop-search {
-	flex: 1 1 320px;
-	max-width: 560px;
+	flex: 1;
 }
 .bookshop-header .wp-block-search__inside-wrapper {
 	width: 100% !important;
@@ -100,19 +106,15 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 }
 .bookshop-header .wp-block-search__button {
 	border-radius: 4px;
-	padding: 0 1.1rem;
-	line-height: 1;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.4rem;
+	width: 44px;
+	padding: 0;
+	display: grid;
+	place-items: center;
 }
-.bookshop-header .wp-block-search__button::before {
-	content: "";
-	width: 16px;
-	height: 16px;
-	background: currentColor;
-	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
-	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
+.bookshop-header .wp-block-search__button svg {
+	width: 20px;
+	height: 20px;
+	fill: currentColor;
 }
 
 /* Live search dropdown (assets/live-search.js). */
@@ -211,12 +213,6 @@ a.bookshop-search__all {
 }
 
 /* Category nav: one row, swipe on small screens. */
-.bookshop-nav {
-	border-top: var(--bs-border);
-}
-.bookshop-bar + .alignwide {
-	margin-top: 0 !important;
-}
 .bookshop-nav .wp-block-navigation__container {
 	flex-wrap: nowrap;
 	overflow-x: auto;
@@ -240,10 +236,18 @@ a.bookshop-search__all {
 	.bookshop-header .wp-block-site-logo img {
 		max-width: 96px;
 	}
-	.bookshop-search {
-		order: 3;
+	/* Logo, then nav and search on their own rows. */
+	.bookshop-bar > :first-child {
+		flex-wrap: wrap !important;
+		row-gap: 0.25rem;
+		min-width: 0;
+	}
+	.bookshop-nav {
 		flex-basis: 100%;
-		max-width: none;
+		min-width: 0;
+	}
+	.bookshop-bar-end {
+		flex-basis: 100%;
 	}
 	.bookshop-bar {
 		row-gap: 0.75rem !important;
@@ -251,38 +255,455 @@ a.bookshop-search__all {
 }
 
 /* ---------- Hero ---------- */
+.bookshop-hero {
+	background: var(--wp--preset--color--accent-5);
+}
+.bookshop-hero h1 {
+	font-family: var(--wp--preset--font-family--noto-serif-bengali);
+	font-weight: 700;
+	line-height: 1.35;
+}
 .bookshop-pill {
-	display: inline-block;
-	background: #fff;
-	border: var(--bs-border);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	background: var(--wp--preset--color--accent-2);
+	color: var(--wp--preset--color--accent-1);
 	border-radius: 999px;
 	padding: 0.2rem 0.9rem;
+	font-weight: 500;
 }
-.bookshop-pill .stars {
-	color: #E0A100;
-	letter-spacing: 1px;
+.bookshop-pill::before {
+	content: "";
+	width: 16px;
+	height: 16px;
+	background: currentColor;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.bookshop-arrow a::after,
+.bookshop-viewall a::after {
+	content: " →";
+}
+.bookshop-arrow a {
+	padding: 0.8rem 1.8rem;
 }
 
-/* ---------- Trust row ---------- */
+/* ---------- Trust bar ---------- */
+.bookshop-trust {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	margin-block: 0;
+	padding: 0;
+	list-style: none;
+}
+.bookshop-trust li {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.9rem;
+	padding: 0.25rem 1rem;
+}
+.bookshop-trust li + li {
+	border-left: var(--bs-border);
+}
 .bookshop-trust svg {
-	width: 30px;
-	height: 30px;
-	stroke: var(--wp--preset--color--contrast);
+	flex: none;
+	box-sizing: border-box;
+	width: 60px;
+	height: 60px;
+	padding: 17px;
+	border-radius: 50%;
+	background: var(--wp--preset--color--accent-2);
+	stroke: var(--wp--preset--color--accent-1);
 	fill: none;
-	stroke-width: 1.5;
+	stroke-width: 1.6;
 	stroke-linecap: round;
 	stroke-linejoin: round;
 }
-
-/* ---------- Section heading ---------- */
-.bookshop-section-head h2 {
+.bookshop-trust p {
 	margin: 0;
+	font-size: 0.8rem;
+	line-height: 1.5;
+	color: var(--wp--preset--color--accent-4);
 }
-.bookshop-viewall a {
+.bookshop-trust strong {
+	display: block;
+	font-size: 1rem;
+	font-weight: 600;
 	color: var(--wp--preset--color--contrast);
+}
+@media (max-width: 900px) {
+	.bookshop-trust {
+		grid-template-columns: repeat(2, 1fr);
+		row-gap: 1.25rem;
+	}
+	.bookshop-trust li {
+		justify-content: flex-start;
+		gap: 0.6rem;
+		padding-inline: 0.5rem;
+	}
+	.bookshop-trust li:nth-child(3) {
+		border-left: 0;
+	}
+	.bookshop-trust svg {
+		width: 42px;
+		height: 42px;
+		padding: 11px;
+	}
+	.bookshop-trust strong {
+		font-size: 0.9rem;
+	}
+}
+
+/* ---------- Category cards ---------- */
+.bookshop-cat-cards {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 1.25rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.bookshop-cat-cards a {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: hidden;
+	background: #fff;
+	border: var(--bs-border);
+	border-radius: 12px;
+	color: var(--wp--preset--color--accent-4);
+	text-decoration: none;
+}
+.bookshop-cat-cards img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+}
+.bookshop-cat-cards span {
+	position: relative;
+	padding: 1rem 4rem 1.1rem 1.1rem;
+	font-size: 0.85rem;
+	line-height: 1.5;
+}
+.bookshop-cat-cards strong {
+	display: block;
+	margin-bottom: 0.15rem;
+	font-family: var(--wp--preset--font-family--noto-serif-bengali);
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: var(--wp--preset--color--contrast);
+}
+/* Round arrow on the right of the text. */
+.bookshop-cat-cards span::after {
+	content: "›";
+	position: absolute;
+	top: 50%;
+	right: 1.1rem;
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	margin-top: -20px;
+	border-radius: 50%;
+	background: var(--wp--preset--color--accent-5);
+	border: var(--bs-border);
+	color: var(--wp--preset--color--contrast);
+	font-size: 1.5rem;
+	line-height: 1;
+}
+.bookshop-cat-cards a:hover {
+	border-color: #CBD3DE;
+	box-shadow: var(--bs-shadow-hover);
+}
+.bookshop-cat-cards a:hover strong {
+	color: var(--wp--preset--color--accent-1);
+}
+.bookshop-cat-cards a:hover span::after {
+	background: var(--wp--preset--color--accent-1);
+	border-color: var(--wp--preset--color--accent-1);
+	color: #fff;
+}
+@media (max-width: 900px) {
+	.bookshop-cat-cards {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.75rem;
+	}
+	.bookshop-cat-cards span {
+		padding: 0.75rem 3rem 0.85rem 0.85rem;
+	}
+	.bookshop-cat-cards span::after {
+		right: 0.75rem;
+		width: 32px;
+		height: 32px;
+		margin-top: -16px;
+	}
+}
+
+/* ---------- Combo offer ---------- */
+/* Light, price-led box: pitch on the left, the top three combos ([bookshop_combos]) on the right. */
+.bookshop-offer {
+	display: grid;
+	grid-template-columns: 1fr 1.3fr;
+	align-items: center;
+	gap: var(--wp--preset--spacing--50);
+	padding: var(--wp--preset--spacing--40) var(--wp--preset--spacing--50);
+	border: var(--bs-border);
+	border-radius: 12px;
+	background: var(--wp--preset--color--accent-5);
+}
+.bookshop-offer h2 {
+	margin: 0.6rem 0 0.4rem;
+	font-family: var(--wp--preset--font-family--noto-serif-bengali);
+	font-size: var(--wp--preset--font-size--x-large);
+	font-weight: 700;
+	line-height: 1.35;
+}
+.bookshop-offer__text > p {
+	margin: 0;
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-offer .bookshop-offer__label {
+	display: inline-block;
+	padding: 0.1rem 0.7rem;
+	border-radius: 4px;
+	background: var(--wp--preset--color--accent-3);
+	color: #fff;
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+}
+.bookshop-offer__perks {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem 1.25rem;
+	margin: 1rem 0 1.25rem;
+	padding: 0;
+	list-style: none;
 	font-size: var(--wp--preset--font-size--small);
 	font-weight: 500;
-	text-underline-offset: 4px;
+}
+.bookshop-offer__perks li::before {
+	content: "✓ ";
+	color: var(--wp--preset--color--accent-1);
+	font-weight: 700;
+}
+.bookshop-offer__button {
+	display: inline-block;
+	padding: 0.6rem 1.4rem;
+	border-radius: 6px;
+	background: var(--wp--preset--color--accent-1);
+	color: #fff;
+	font-weight: 600;
+	text-decoration: none;
+}
+.bookshop-offer__button::after {
+	content: " →";
+}
+.bookshop-offer__button:hover {
+	background: #0B5234;
+}
+.bookshop-combos {
+	display: grid;
+	gap: 0.6rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.bookshop-combos a {
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+	padding: 0.6rem 0.85rem 0.6rem 0.6rem;
+	border: var(--bs-border);
+	border-radius: 10px;
+	background: #fff;
+	color: var(--wp--preset--color--contrast);
+	text-decoration: none;
+}
+.bookshop-combos a:hover {
+	border-color: #CBD3DE;
+	box-shadow: var(--bs-shadow-hover);
+}
+.bookshop-combos img {
+	flex: none;
+	width: 64px;
+	height: 64px;
+	object-fit: cover;
+	border-radius: 6px;
+}
+.bookshop-combos a > span {
+	flex: 1;
+	min-width: 0;
+}
+.bookshop-combos strong {
+	display: block;
+	overflow: hidden;
+	font-weight: 600;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.bookshop-combos .price {
+	display: flex;
+	gap: 0.5rem;
+	align-items: baseline;
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: var(--wp--preset--color--accent-1);
+}
+.bookshop-combos .price ins {
+	order: -1;
+	text-decoration: none;
+}
+.bookshop-combos .price del {
+	font-size: 0.8rem;
+	font-weight: 400;
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-combos em {
+	flex: none;
+	padding: 0.2rem 0.5rem;
+	border-radius: 4px;
+	background: #FDECEC;
+	color: var(--wp--preset--color--accent-3);
+	font-size: 0.8rem;
+	font-style: normal;
+	font-weight: 700;
+}
+@media (max-width: 781px) {
+	.bookshop-offer {
+		grid-template-columns: 1fr;
+		gap: var(--wp--preset--spacing--30);
+		padding: var(--wp--preset--spacing--30);
+	}
+}
+
+/* ---------- FAQ (core Details blocks) ---------- */
+.bookshop-faq h2 {
+	margin-bottom: 0.25rem;
+	font-family: var(--wp--preset--font-family--noto-serif-bengali);
+	font-weight: 700;
+}
+.bookshop-faq h2::after {
+	content: "";
+	display: block;
+	width: 32px;
+	height: 3px;
+	margin: 0.4rem auto 0;
+	background: var(--wp--preset--color--accent-1);
+}
+.bookshop-faq > p {
+	margin-bottom: var(--wp--preset--spacing--30);
+}
+.bookshop-faq-item {
+	margin-block: 0 0.75rem !important;
+	border: var(--bs-border);
+	border-radius: 10px;
+	background: #fff;
+}
+.bookshop-faq-item summary {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.9rem 1.1rem;
+	font-weight: 600;
+	cursor: pointer;
+	list-style: none;
+}
+.bookshop-faq-item summary::-webkit-details-marker {
+	display: none;
+}
+.bookshop-faq-item summary::after {
+	content: "+";
+	flex: none;
+	font-size: 1.4rem;
+	font-weight: 400;
+	line-height: 1;
+	color: var(--wp--preset--color--accent-1);
+}
+.bookshop-faq-item[open] summary::after {
+	content: "−";
+}
+.bookshop-faq-item[open] {
+	border-color: #CBD3DE;
+}
+.bookshop-faq-item > p {
+	margin: 0;
+	padding: 0 1.1rem 1rem;
+	color: var(--wp--preset--color--accent-4);
+}
+
+/* ---------- Reader reviews ([bookshop_reviews]) ---------- */
+.bookshop-reviews {
+	padding-block: var(--wp--preset--spacing--50) var(--wp--preset--spacing--40);
+}
+.bookshop-reviews ul {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 1.25rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.bookshop-reviews li {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 1.25rem;
+	border: var(--bs-border);
+	border-radius: 12px;
+	background: #fff;
+}
+.bookshop-reviews li p {
+	flex: 1;
+	margin: 0;
+}
+.bookshop-reviews footer {
+	font-size: var(--wp--preset--font-size--small);
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-reviews footer strong {
+	display: block;
+	color: var(--wp--preset--color--contrast);
+}
+.bookshop-reviews footer a {
+	color: inherit;
+}
+
+/* ---------- Section heading ---------- */
+.bookshop-section-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: var(--wp--preset--spacing--30);
+}
+.bookshop-section-head h2 {
+	margin: 0;
+	font-family: var(--wp--preset--font-family--noto-serif-bengali);
+	font-weight: 700;
+}
+.bookshop-section-head h2::after {
+	content: "";
+	display: block;
+	width: 32px;
+	height: 3px;
+	margin-top: 0.4rem;
+	background: var(--wp--preset--color--accent-1);
+}
+.bookshop-viewall {
+	margin: 0;
+	white-space: nowrap;
+}
+.bookshop-viewall a {
+	color: var(--wp--preset--color--accent-1);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	text-decoration: none;
+}
+.bookshop-viewall a:hover {
+	text-decoration: underline;
 }
 
 /* ---------- Product cards ---------- */
@@ -302,8 +723,8 @@ a.bookshop-search__all {
 	flex-direction: column;
 }
 .wc-block-product:hover {
-	border-color: var(--wp--preset--color--accent-1);
-	box-shadow: 0 6px 20px rgb(17 24 39 / 0.08);
+	border-color: #CBD3DE;
+	box-shadow: var(--bs-shadow-hover);
 }
 .wc-block-product .wc-block-components-product-image {
 	margin-bottom: 0 !important;
@@ -388,6 +809,46 @@ a.bookshop-search__all {
 	border-radius: 6px !important;
 	padding: 0.55rem 0.75rem !important;
 	font-weight: 500;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
+}
+.wc-block-product .wc-block-components-product-button__button::before {
+	content: "";
+	flex: none;
+	width: 16px;
+	height: 16px;
+	background: currentColor;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='20' r='1.5'/%3E%3Ccircle cx='18' cy='20' r='1.5'/%3E%3Cpath d='M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h9.6a1 1 0 0 0 1-.8L21 7H6'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='20' r='1.5'/%3E%3Ccircle cx='18' cy='20' r='1.5'/%3E%3Cpath d='M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h9.6a1 1 0 0 0 1-.8L21 7H6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.wc-block-product .wc-block-components-product-button__button.is-loading::before {
+	visibility: hidden;
+}
+/* Stars from functions.php: grey row, gold row on top clipped to the rating. */
+.bookshop-rating {
+	margin: 0.3rem 0 0;
+	font-size: 0.8rem;
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-stars {
+	position: relative;
+	display: inline-block;
+	letter-spacing: 1px;
+	color: #D5D9DF;
+}
+.bookshop-stars::before,
+.bookshop-stars::after {
+	content: "★★★★★";
+}
+.bookshop-stars::after {
+	position: absolute;
+	inset: 0 auto 0 0;
+	width: var(--rating);
+	overflow: hidden;
+	color: #F5A623;
+	white-space: nowrap;
 }
 /* Adding to cart: spinner, label hidden (assets/add-to-cart-loading.js). */
 .wc-block-product .wc-block-components-product-button__button.is-loading {
@@ -490,80 +951,73 @@ a.bookshop-search__all {
 	}
 }
 
-/* ---------- Category tiles ---------- */
-.bookshop-tile {
-	border-radius: var(--bs-radius);
-	overflow: hidden;
+/* ---------- Author strip ([bookshop_writers]) ---------- */
+.bookshop-writers {
+	position: relative;
 }
-.bookshop-tile .bookshop-tile-label {
+.bookshop-writers ul {
+	display: flex;
+	gap: 1rem;
 	margin: 0;
+	padding: 0 0.25rem;
+	list-style: none;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
 }
-.bookshop-tile .bookshop-tile-label a {
-	display: block;
-	background: #fff;
+.bookshop-writers li {
+	flex: 0 0 150px;
+	scroll-snap-align: start;
+}
+.bookshop-writers a {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.75rem;
 	color: var(--wp--preset--color--contrast);
-	border-radius: 4px;
-	padding: 0.4rem;
-	font-weight: 600;
+	font-weight: 500;
+	text-align: center;
 	text-decoration: none;
 }
-.bookshop-tile .bookshop-tile-label a::after {
-	content: "";
-	position: absolute;
-	inset: 0;
-}
-
-/* ---------- Why-us checklist ---------- */
-.bookshop-checks {
-	list-style: none;
-	padding: 0;
-}
-.bookshop-checks li {
-	position: relative;
-	padding-left: 3rem;
-	margin-bottom: 1.25rem;
-	color: var(--wp--preset--color--accent-4);
-	font-size: var(--wp--preset--font-size--small);
-}
-.bookshop-checks li strong {
-	color: var(--wp--preset--color--contrast);
-	font-size: var(--wp--preset--font-size--medium);
-}
-.bookshop-checks li::before {
-	content: "✓";
-	position: absolute;
-	left: 0;
-	top: 0.1rem;
-	width: 2rem;
-	height: 2rem;
+.bookshop-writers .bookshop-writer-img {
+	width: 110px;
+	height: 110px;
 	border-radius: 50%;
-	background: var(--wp--preset--color--accent-1);
-	color: #fff;
-	display: grid;
-	place-items: center;
-	font-weight: 700;
+	object-fit: cover;
 }
-
-/* ---------- Inline category band ---------- */
-.bookshop-inline {
-	list-style: none;
+.bookshop-writers a:hover {
+	color: var(--wp--preset--color--accent-1);
+}
+.bookshop-writers button {
+	position: absolute;
+	top: 37px;
+	z-index: 1;
+	width: 36px;
+	height: 36px;
 	padding: 0;
-	margin: 0;
-	text-align: center;
+	border: var(--bs-border);
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: var(--bs-shadow-hover);
+	cursor: pointer;
 }
-.bookshop-inline li,
-.bookshop-inline .children {
-	display: inline;
-	padding: 0;
+.bookshop-writers button::before {
+	content: "‹";
+	font-size: 1.5rem;
+	line-height: 1;
 }
-.bookshop-inline li a {
-	color: #fff;
-	margin: 0 0.4rem;
+.bookshop-writers__prev {
+	left: -18px;
 }
-.bookshop-inline li + li::before,
-.bookshop-inline .children li::before {
-	content: "|";
-	opacity: 0.5;
+.bookshop-writers__next {
+	right: -18px;
+}
+.bookshop-writers__next::before {
+	content: "›" !important;
+}
+/* Arrows only when the row overflows the screen width (roughly 6+ authors). */
+.bookshop-writers:not(:has(li:nth-child(7))) button {
+	display: none;
 }
 
 /* ---------- Checkout & cart: bordered panels ---------- */
@@ -632,10 +1086,10 @@ a.bookshop-search__all {
 
 /* Header: title + count, square close button. */
 /* Notices area keeps a 16px margin even when empty (it holds only whitespace, so :empty won't match). */
-.wc-block-mini-cart__drawer .wc-block-components-notices:not(:has(*)) {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-notices:not(:has(*)) {
 	display: none;
 }
-.wc-block-mini-cart__drawer .wc-block-mini-cart__title {
+.wp-block-woocommerce-mini-cart-contents .wc-block-mini-cart__title {
 	display: flex;
 	align-items: center;
 	gap: 0.4rem;
@@ -645,12 +1099,12 @@ a.bookshop-search__all {
 	font-size: 1.25rem;
 	mask-image: none;
 }
-.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-items-counter-block {
+.wp-block-woocommerce-mini-cart-contents .wp-block-woocommerce-mini-cart-title-items-counter-block {
 	color: var(--wp--preset--color--accent-4);
 	font-weight: 500;
 }
 /* WooCommerce offsets this with margin:-1em and padding:1em; reset both so the position is exact. */
-.wc-block-mini-cart__drawer .wc-block-components-drawer__close-wrapper .wc-block-components-drawer__close {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-drawer__close-wrapper .wc-block-components-drawer__close {
 	top: 14px; /* Centre of the title row. */
 	inset-inline-end: 1.5rem;
 	width: 40px;
@@ -664,19 +1118,19 @@ a.bookshop-search__all {
 	color: var(--wp--preset--color--contrast);
 	opacity: 1;
 }
-.wc-block-mini-cart__drawer .wc-block-components-drawer__close:hover {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-drawer__close:hover {
 	background: var(--wp--preset--color--accent-6) !important;
 }
 
 /* Items: image | name + trash / prices / quantity + saving. */
-.wc-block-mini-cart__drawer .wc-block-mini-cart__items {
+.wp-block-woocommerce-mini-cart-contents .wc-block-mini-cart__items {
 	padding: 0 1.5rem;
 }
-.wc-block-mini-cart__drawer .wc-block-cart-items {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-items {
 	border: 0;
 	margin: 0;
 }
-.wc-block-mini-cart__drawer .wc-block-cart-items__row {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-items__row {
 	display: grid !important;
 	grid-template-columns: 84px minmax(0, 1fr) auto;
 	grid-template-areas:
@@ -689,29 +1143,29 @@ a.bookshop-search__all {
 	padding: 1.25rem 0 !important;
 	border-bottom: var(--bs-border);
 }
-.wc-block-mini-cart__drawer .wc-block-cart-items__row:last-child {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-items__row:last-child {
 	border-bottom: 0;
 }
-.wc-block-mini-cart__drawer .wc-block-cart-items__row > td {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-items__row > td {
 	padding: 0 !important;
 	border: 0 !important;
 }
-.wc-block-mini-cart__drawer :is(td.wc-block-cart-item__product, .wc-block-cart-item__wrap, .wc-block-cart-item__quantity, td.wc-block-cart-item__total, .wc-block-cart-item__total-price-and-sale-badge-wrapper) {
+.wp-block-woocommerce-mini-cart-contents :is(td.wc-block-cart-item__product, .wc-block-cart-item__wrap, .wc-block-cart-item__quantity, td.wc-block-cart-item__total, .wc-block-cart-item__total-price-and-sale-badge-wrapper) {
 	display: contents !important;
 }
-.wc-block-mini-cart__drawer td.wc-block-cart-item__image {
+.wp-block-woocommerce-mini-cart-contents td.wc-block-cart-item__image {
 	grid-area: img;
 	align-self: start;
 	width: auto;
 }
-.wc-block-mini-cart__drawer .wc-block-cart-item__image img {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-item__image img {
 	width: 84px;
 	height: 84px;
 	object-fit: cover;
 	border: var(--bs-border);
 	border-radius: 8px;
 }
-.wc-block-mini-cart__drawer .wc-block-components-product-name {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-product-name {
 	grid-row: 1;
 	grid-column: 2 / -1; /* Use the full width; the trash icon sits over the right edge. */
 	padding-right: 2rem;
@@ -721,43 +1175,43 @@ a.bookshop-search__all {
 	line-height: 1.45;
 	text-decoration: none;
 }
-.wc-block-mini-cart__drawer a.wc-block-components-product-name:hover {
+.wp-block-woocommerce-mini-cart-contents a.wc-block-components-product-name:hover {
 	color: var(--wp--preset--color--accent-1);
 }
-.wc-block-mini-cart__drawer .wc-block-cart-item__remove-link {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-item__remove-link {
 	grid-area: remove;
 	justify-self: end;
 	align-self: start;
 	margin: 0 !important;
 	color: var(--wp--preset--color--accent-4) !important;
 }
-.wc-block-mini-cart__drawer .wc-block-cart-item__remove-link:hover {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-item__remove-link:hover {
 	color: var(--wp--preset--color--accent-3) !important;
 }
-.wc-block-mini-cart__drawer .wc-block-cart-item__prices {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-item__prices {
 	grid-area: prices;
 	margin: 0;
 	font-size: 0.95rem;
 }
-.wc-block-mini-cart__drawer .wc-block-cart-item__prices .wc-block-components-product-price__value {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-item__prices .wc-block-components-product-price__value {
 	font-weight: 600;
 	color: var(--wp--preset--color--contrast);
 }
-.wc-block-mini-cart__drawer .wc-block-cart-item__prices del {
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-item__prices del {
 	margin-right: 0.35rem;
 	color: var(--wp--preset--color--accent-4);
 	font-size: 0.85em;
 }
-.wc-block-mini-cart__drawer .wc-block-components-product-metadata,
-.wc-block-mini-cart__drawer .wc-block-cart-item__total .wc-block-components-product-price {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-product-metadata,
+.wp-block-woocommerce-mini-cart-contents .wc-block-cart-item__total .wc-block-components-product-price {
 	display: none !important;
 }
-.wc-block-mini-cart__drawer .wc-block-components-product-badge:not(.wc-block-components-sale-badge) {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-product-badge:not(.wc-block-components-sale-badge) {
 	grid-column: 2 / -1;
 	justify-self: start;
 }
 /* Quantity: [−] | n | [+] */
-.wc-block-mini-cart__drawer .wc-block-components-quantity-selector {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-quantity-selector {
 	grid-area: qty;
 	width: 116px;
 	min-width: 0;
@@ -768,10 +1222,10 @@ a.bookshop-search__all {
 	border-radius: 8px;
 	background: #fff;
 }
-.wc-block-mini-cart__drawer .wc-block-components-quantity-selector::after {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-quantity-selector::after {
 	display: none;
 }
-.wc-block-mini-cart__drawer .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button {
 	flex: 0 0 36px;
 	min-width: 36px;
 	color: var(--wp--preset--color--contrast);
@@ -779,26 +1233,26 @@ a.bookshop-search__all {
 	line-height: 1;
 	opacity: 1;
 }
-.wc-block-mini-cart__drawer .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button--minus {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button--minus {
 	border-inline-end: 1px solid var(--wp--preset--color--accent-6);
 }
-.wc-block-mini-cart__drawer .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button--plus {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button--plus {
 	border-inline-start: 1px solid var(--wp--preset--color--accent-6);
 }
-.wc-block-mini-cart__drawer .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button:hover:not(:disabled) {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button:hover:not(:disabled) {
 	background: var(--wp--preset--color--accent-5);
 	color: var(--wp--preset--color--accent-1);
 }
-.wc-block-mini-cart__drawer .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button:disabled {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button:disabled {
 	opacity: 0.3;
 }
-.wc-block-mini-cart__drawer .wc-block-components-quantity-selector input.wc-block-components-quantity-selector__input {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-quantity-selector input.wc-block-components-quantity-selector__input {
 	min-width: 0;
 	padding: 0;
 	font-size: 0.95rem;
 	font-weight: 600;
 }
-.wc-block-mini-cart__drawer .wc-block-components-sale-badge {
+.wp-block-woocommerce-mini-cart-contents .wc-block-components-sale-badge {
 	grid-area: save;
 	justify-self: end;
 	margin: 0;
@@ -812,29 +1266,29 @@ a.bookshop-search__all {
 }
 
 /* Footer: subtotal, note, one big checkout button. */
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer {
+.wp-block-woocommerce-mini-cart-contents .wc-block-mini-cart__footer {
 	padding: 1.25rem 1.5rem 1.5rem;
 	border-top: var(--bs-border);
 	box-shadow: 0 -8px 24px rgb(17 24 39 / 0.05);
 }
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-subtotal {
+.wp-block-woocommerce-mini-cart-contents .wc-block-mini-cart__footer-subtotal {
 	margin-bottom: 0 !important;
 	padding: 0 0 1rem;
 	font-size: 1.1rem;
 	font-weight: 700;
 }
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-subtotal .wc-block-components-totals-item__description {
+.wp-block-woocommerce-mini-cart-contents .wc-block-mini-cart__footer-subtotal .wc-block-components-totals-item__description {
 	display: none !important; /* "Shipping ... calculated at checkout" note. */
 }
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-actions {
+.wp-block-woocommerce-mini-cart-contents .wc-block-mini-cart__footer-actions {
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
 }
-.wc-block-mini-cart__drawer :is(.wc-block-mini-cart__footer-checkout, .wc-block-mini-cart__footer-cart) {
+.wp-block-woocommerce-mini-cart-contents :is(.wc-block-mini-cart__footer-checkout, .wc-block-mini-cart__footer-cart) {
 	box-sizing: border-box;
 }
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-checkout {
+.wp-block-woocommerce-mini-cart-contents .wc-block-mini-cart__footer-checkout {
 	order: -1;
 	width: 100%;
 	margin: 0;
@@ -847,11 +1301,11 @@ a.bookshop-search__all {
 	font-weight: 600;
 	line-height: 1.4;
 }
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-checkout:hover {
+.wp-block-woocommerce-mini-cart-contents .wc-block-mini-cart__footer-checkout:hover {
 	background: #0B5234;
 	color: #fff;
 }
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-cart {
+.wp-block-woocommerce-mini-cart-contents .wc-block-mini-cart__footer-cart {
 	width: 100%;
 	margin: 0;
 	padding: 0.35rem;
@@ -1273,6 +1727,10 @@ a.bookshop-search__all {
 }
 
 /* ---------- Footer ---------- */
+/* Footer keeps the deeper grey; the shared panel colour (accent-5) is lighter. */
+.bookshop-footer.has-accent-5-background-color {
+	background-color: #F4F6F9 !important;
+}
 .bookshop-footer-links {
 	padding-left: 0;
 	list-style: none;
@@ -1282,6 +1740,45 @@ footer a {
 }
 footer a:hover {
 	text-decoration: underline;
+}
+.bookshop-footer h3 {
+	margin-bottom: 0.75rem;
+}
+@media (min-width: 782px) {
+	.bookshop-footer .wp-block-column:nth-child(n+3) {
+		border-left: var(--bs-border);
+		padding-left: var(--wp--preset--spacing--40);
+	}
+}
+.bookshop-footer-links li {
+	margin-bottom: 0.4rem;
+}
+.bookshop-footer-links a {
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-contact li {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	color: var(--wp--preset--color--accent-4);
+}
+.bookshop-contact li::before {
+	content: "";
+	flex: none;
+	width: 18px;
+	height: 18px;
+	background: var(--wp--preset--color--contrast);
+	-webkit-mask: var(--icon) center / contain no-repeat;
+	mask: var(--icon) center / contain no-repeat;
+}
+.bookshop-contact .is-pin {
+	--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z'/%3E%3Ccircle cx='12' cy='10' r='2.5'/%3E%3C/svg%3E");
+}
+.bookshop-contact .is-phone {
+	--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z'/%3E%3C/svg%3E");
+}
+.bookshop-contact .is-mail {
+	--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Cpath d='m3 7 9 6 9-6'/%3E%3C/svg%3E");
 }
 
 /* ---------- My account ---------- */
