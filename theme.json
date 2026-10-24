@@ -109,15 +109,18 @@
 			"fontSizes": [
 				{
 					"fluid": false,
+					"name": "Extra Small",
+					"size": "0.8125rem",
+					"slug": "x-small"
+				},
+				{
+					"fluid": false,
 					"name": "Small",
 					"size": "0.875rem",
 					"slug": "small"
 				},
 				{
-					"fluid": {
-						"max": "1.125rem",
-						"min": "1rem"
-					},
+					"fluid": false,
 					"name": "Medium",
 					"size": "1rem",
 					"slug": "medium"

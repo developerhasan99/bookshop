@@ -5,7 +5,7 @@
 
 <!-- wp:site-title {"level":0,"fontSize":"large","fontFamily":"noto-serif-bengali"} /-->
 
-<!-- wp:navigation {"className":"bookshop-nav","overlayMenu":"never","style":{"spacing":{"blockGap":"var:preset|spacing|30"},"typography":{"fontWeight":"500"}},"fontSize":"small"} -->
+<!-- wp:navigation {"className":"bookshop-nav","overlayMenu":"mobile","icon":"menu","style":{"spacing":{"blockGap":"var:preset|spacing|30"},"typography":{"fontWeight":"500"}},"fontSize":"small"} -->
 <!-- wp:navigation-link {"label":"বই","url":"/shop/","kind":"custom"} /-->
 <!-- wp:navigation-link {"label":"উপন্যাস","url":"/product-category/%e0%a6%b8%e0%a6%ae%e0%a6%95%e0%a6%be%e0%a6%b2%e0%a7%80%e0%a6%a8-%e0%a6%89%e0%a6%aa%e0%a6%a8%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%b8/","kind":"custom"} /-->
 <!-- wp:navigation-link {"label":"কবিতা","url":"/product-category/kobita/","kind":"custom"} /-->
@@ -18,7 +18,11 @@
 <div class="wp-block-group bookshop-bar-end"><!-- wp:search {"className":"bookshop-search","label":"বই খুঁজুন","showLabel":false,"placeholder":"বই খুঁজুন…","width":340,"widthUnit":"px","buttonText":"খুঁজুন","buttonPosition":"button-inside","buttonUseIcon":true,"query":{"post_type":"product"}} /-->
 
 <!-- wp:group {"className":"bookshop-actions","style":{"spacing":{"blockGap":"0.25rem"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
-<div class="wp-block-group bookshop-actions"><!-- wp:woocommerce/customer-account {"displayStyle":"icon_only","iconStyle":"line","iconClass":"wc-block-customer-account__account-icon"} /-->
+<div class="wp-block-group bookshop-actions"><!-- wp:html -->
+<button type="button" class="bookshop-search-toggle" aria-label="বই খুঁজুন" aria-expanded="false" onclick="var h=this.closest('.bookshop-header'),o=h.classList.toggle('is-search-open');this.setAttribute('aria-expanded',o);if(o)h.querySelector('.wp-block-search__input').focus()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+<!-- /wp:html -->
+
+<!-- wp:woocommerce/customer-account {"displayStyle":"icon_only","iconStyle":"line","iconClass":"wc-block-customer-account__account-icon"} /-->
 
 <!-- wp:woocommerce/mini-cart {"addToCartBehaviour":"open_drawer"} /--></div>
 <!-- /wp:group --></div>
